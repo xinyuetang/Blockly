@@ -5,12 +5,14 @@ import {FormsModule} from '@angular/forms'
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
+import { BlocklyComponent } from './components/blockly/blockly.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    BlocklyComponent
   ],
   imports: [
     BrowserModule,
@@ -18,6 +20,7 @@ import { HeaderComponent } from './components/header/header.component';
     FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [BlocklyComponent]
 })
 export class AppModule { }
