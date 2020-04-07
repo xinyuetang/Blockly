@@ -5,7 +5,8 @@ Computational thinking learning platform based on Blockly
 1. 使用npm全局安装angular/cli
 2.  在angular目录下
 ```
-ng serve --open
+npm install
+ng serve --open 或者 npm run start
 ```
 3. 访问 http://localhost:4200/
 
