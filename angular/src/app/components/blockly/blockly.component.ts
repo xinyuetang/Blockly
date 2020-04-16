@@ -13,6 +13,32 @@ export class BlocklyComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    Blockly.Blocks['game1_pick'] = {
+      init: function () {
+        this.jsonInit({
+          "type": "game1_pick",
+          "message0": "从接收处拿取排在第一的信件",
+          "previousStatement": null,
+          "nextStatement": null,
+          "colour": 230,
+          "tooltip": "",
+          "helpUrl": ""
+        });
+      }
+    };
+    Blockly.Blocks['game1_put'] = {
+      init: function () {
+        this.jsonInit({
+          "type": "game1_put",
+          "message0": "将拿到的信件放到发放处",
+          "previousStatement": null,
+          "nextStatement": null,
+          "colour": 315,
+          "tooltip": "",
+          "helpUrl": ""
+        });
+      }
+    };
     const blocklyDiv = document.getElementById('blocklyDiv');
 
     Blockly.inject(blocklyDiv, {
@@ -26,28 +52,10 @@ export class BlocklyComponent implements OnInit {
       },
       toolbox: `
       <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
-        <block type="controls_ifelse"></block>
-        <block type="logic_compare"></block>
-        <block type="logic_operation"></block>
-        <block type="controls_repeat_ext">
-            <value name="TIMES">
-                <shadow type="math_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="logic_operation"></block>
-        <block type="logic_negate"></block>
-        <block type="logic_boolean"></block>
-        <block type="logic_null" disabled="true"></block>
-        <block type="logic_ternary"></block>
-        <block type="text_charAt">
-            <value name="VALUE">
-                <block type="variables_get">
-                    <field name="VAR">text</field>
-                </block>
-            </value>
-        </block>
+      <category name="基本动作">
+        <block type="game1_pick"></block>
+        <block type="game1_put"></block>
+      </category>  
       </xml>
         `
     } as Blockly.BlocklyOptions);

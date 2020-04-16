@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent { /*数据*/
-  title = 'angular';
+  title = 'Computational Thinking with blockly';
 }
