@@ -1,6 +1,10 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 #blocklyDiv {
-    height: 85%;
-    width: 40%;
+    width: 400px;
+    height: 500px;
+    left: 0;
+    top:10px;
     position: absolute;
-    bottom: 0;
+    /* bottom: 0;
+    position: absolute; */
 }

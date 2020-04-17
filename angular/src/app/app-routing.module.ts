@@ -6,6 +6,8 @@ import { ListOfGamesComponent } from './components/list-of-games/list-of-games.c
 import { QuickStartComponent } from './components/quick-start/quick-start.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
 import { HomeComponent } from './components/home/home.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'quick-start', component: QuickStartComponent},
   { path: 'user-info', component:  UserInfoComponent},
   { path: 'game/:id', component: BlocklyComponent },
+  { path: 'login', component: LoginComponent},
+  { path: 'register', component: RegisterComponent}
 ];
 
 @NgModule({

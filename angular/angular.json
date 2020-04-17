@@ -31,7 +31,12 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/blockly/blockly.js",
+               "node_modules/blockly/blocks.js",
+               "node_modules/blockly/javascript.js",
+               "src/assets/blockly/custom_block.js"
+            ]
           },
           "configurations": {
             "production": {

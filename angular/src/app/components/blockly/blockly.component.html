@@ -1,1 +1,21 @@
-<div id="blocklyDiv"></div>
+<mat-grid-list cols="12" rows="7" rowHeight="70px" id="game-panel">
+
+    <mat-grid-tile colspan="5" rowspan="7" id="blocklyArea">
+        <div id="blocklyDiv"></div>
+    </mat-grid-tile>
+
+    <mat-grid-tile colspan="4" rowspan="3">Game description here
+        <button id="bt">运行</button>
+    </mat-grid-tile>
+    
+    <mat-grid-tile colspan="3" rowspan="7">
+        <app-vedio-room id="vedio-room">vedio room</app-vedio-room>
+    </mat-grid-tile>
+
+
+    <mat-grid-tile colspan="4" rowspan="4">
+        <app-animation></app-animation>
+    </mat-grid-tile>
+
+
+</mat-grid-list>

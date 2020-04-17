@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { GameService }  from '../../services/game.service';
+import { IGame } from 'src/app/models/game';
 
-import * as Blockly from 'blockly';
+//import * as Blockly from 'blockly';
+declare var Blockly: any;
 
 @Component({
   selector: 'app-blockly',
@@ -8,40 +13,18 @@ import * as Blockly from 'blockly';
   styleUrls: ['./blockly.component.css']
 })
 export class BlocklyComponent implements OnInit {
-
-
-  constructor() { }
+  gameId:number;
+  game: IGame;
+  workspace: any;
+  constructor(
+    private route: ActivatedRoute,
+    private gameService: GameService,
+    private location: Location){
+      this.getGame();
+  }
 
   ngOnInit(): void {
-    Blockly.Blocks['game1_pick'] = {
-      init: function () {
-        this.jsonInit({
-          "type": "game1_pick",
-          "message0": "从接收处拿取排在第一的信件",
-          "previousStatement": null,
-          "nextStatement": null,
-          "colour": 230,
-          "tooltip": "",
-          "helpUrl": ""
-        });
-      }
-    };
-    Blockly.Blocks['game1_put'] = {
-      init: function () {
-        this.jsonInit({
-          "type": "game1_put",
-          "message0": "将拿到的信件放到发放处",
-          "previousStatement": null,
-          "nextStatement": null,
-          "colour": 315,
-          "tooltip": "",
-          "helpUrl": ""
-        });
-      }
-    };
-    const blocklyDiv = document.getElementById('blocklyDiv');
-
-    Blockly.inject(blocklyDiv, {
+    this.workspace = Blockly.inject('blocklyDiv', {
       readOnly: false,
       media: '../media/',
       trashcan: true,
@@ -50,15 +33,42 @@ export class BlocklyComponent implements OnInit {
         drag: true,
         wheel: true
       },
-      toolbox: `
-      <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
-      <category name="基本动作">
-        <block type="game1_pick"></block>
-        <block type="game1_put"></block>
-      </category>  
-      </xml>
-        `
-    } as Blockly.BlocklyOptions);
-  }
+      toolbox: this.game.toobox,
+    });
 
+    var bt = document.getElementById('bt');
+    bt.addEventListener('click',()=>{
+      console.log("the code:\n");
+    console.log(Blockly.JavaScript.workspaceToCode(this.workspace));
+    })
+    
+    /*resizable */
+    // const blocklyArea = document.getElementById('blocklyArea');
+    // const blocklyDiv = document.getElementById('blocklyDiv');
+    // var onresize = function() {
+    //   // Compute the absolute coordinates and dimensions of blocklyArea.
+    //   var element :HTMLElement=blocklyArea;
+    //   var x = 0;
+    //   var y = 0;
+    //   // do {
+    //     x += element.offsetLeft;
+    //     y += element.offsetTop;
+    //     // element =  element.offsetParent;
+    //   // } while (element!=null);
+    //   // Position blocklyDiv over blocklyArea.
+    //   blocklyDiv.style.left = x + 'px';
+    //   blocklyDiv.style.top = y + 'px';
+    //   blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+    //   blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+    //   Blockly.svgResize(this.workspace);
+    // };
+    //  window.addEventListener('resize', onresize, false);
+  };  
+
+  getGame(): void {
+    this.gameId = +this.route.snapshot.paramMap.get('id');
+    this.game = this.gameService.getGame(this.gameId);
+  }
 }
+
+
