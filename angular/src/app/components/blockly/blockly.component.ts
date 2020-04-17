@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { GameService }  from '../../services/game.service';
+import { IGame } from 'src/app/models/game';
 
-import * as Blockly from 'blockly';
+//import * as Blockly from 'blockly';
+declare var Blockly: any;
 
 @Component({
   selector: 'app-blockly',
@@ -8,14 +13,18 @@ import * as Blockly from 'blockly';
   styleUrls: ['./blockly.component.css']
 })
 export class BlocklyComponent implements OnInit {
-
-
-  constructor() { }
+  gameId:number;
+  game: IGame;
+  workspace: any;
+  constructor(
+    private route: ActivatedRoute,
+    private gameService: GameService,
+    private location: Location){
+      this.getGame();
+  }
 
   ngOnInit(): void {
-    const blocklyDiv = document.getElementById('blocklyDiv');
-
-    Blockly.inject(blocklyDiv, {
+    this.workspace = Blockly.inject('blocklyDiv', {
       readOnly: false,
       media: '../media/',
       trashcan: true,
@@ -24,33 +33,42 @@ export class BlocklyComponent implements OnInit {
         drag: true,
         wheel: true
       },
-      toolbox: `
-      <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
-        <block type="controls_ifelse"></block>
-        <block type="logic_compare"></block>
-        <block type="logic_operation"></block>
-        <block type="controls_repeat_ext">
-            <value name="TIMES">
-                <shadow type="math_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="logic_operation"></block>
-        <block type="logic_negate"></block>
-        <block type="logic_boolean"></block>
-        <block type="logic_null" disabled="true"></block>
-        <block type="logic_ternary"></block>
-        <block type="text_charAt">
-            <value name="VALUE">
-                <block type="variables_get">
-                    <field name="VAR">text</field>
-                </block>
-            </value>
-        </block>
-      </xml>
-        `
-    } as Blockly.BlocklyOptions);
-  }
+      toolbox: this.game.toobox,
+    });
 
+    var bt = document.getElementById('bt');
+    bt.addEventListener('click',()=>{
+      console.log("the code:\n");
+    console.log(Blockly.JavaScript.workspaceToCode(this.workspace));
+    })
+    
+    /*resizable */
+    // const blocklyArea = document.getElementById('blocklyArea');
+    // const blocklyDiv = document.getElementById('blocklyDiv');
+    // var onresize = function() {
+    //   // Compute the absolute coordinates and dimensions of blocklyArea.
+    //   var element :HTMLElement=blocklyArea;
+    //   var x = 0;
+    //   var y = 0;
+    //   // do {
+    //     x += element.offsetLeft;
+    //     y += element.offsetTop;
+    //     // element =  element.offsetParent;
+    //   // } while (element!=null);
+    //   // Position blocklyDiv over blocklyArea.
+    //   blocklyDiv.style.left = x + 'px';
+    //   blocklyDiv.style.top = y + 'px';
+    //   blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+    //   blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+    //   Blockly.svgResize(this.workspace);
+    // };
+    //  window.addEventListener('resize', onresize, false);
+  };  
+
+  getGame(): void {
+    this.gameId = +this.route.snapshot.paramMap.get('id');
+    this.game = this.gameService.getGame(this.gameId);
+  }
 }
+
+

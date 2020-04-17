@@ -1,0 +1,10 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+.links{
+    right: 10px;
+    position: absolute;
+}
+a{
+    margin: 10px;
+    text-decoration: none;
+    color: #FFF;
+}
