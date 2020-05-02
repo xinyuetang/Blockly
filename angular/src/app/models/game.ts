@@ -1,8 +1,8 @@
 export interface IGame {
-    id:number;
+    id: number;
     name: string;
     description: string;
     hint: string;
-    toobox: string;    
+    toobox: string;
     xmlData: string;
-  }
+}

@@ -5,6 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent { /*数据*/
-  title = 'Computational Thinking with blockly';
+export class AppComponent {
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { GameService }  from '../../services/game.service';
+import { GameService } from '../../services/game.service';
 import { IGame } from 'src/app/models/game';
 
-//import * as Blockly from 'blockly';
+// import * as Blockly from 'blockly';
 declare var Blockly: any;
 
 @Component({
@@ -13,7 +13,7 @@ declare var Blockly: any;
   styleUrls: ['./blockly.component.css']
 })
 export class BlocklyComponent implements OnInit {
-  gameId:number;
+  gameId: number;
   game: IGame;
   workspace: any;
   constructor(
@@ -24,24 +24,24 @@ export class BlocklyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.workspace = Blockly.inject('blocklyDiv', {
-      readOnly: false,
-      media: '../media/',
-      trashcan: true,
-      move: {
-        scrollbars: true,
-        drag: true,
-        wheel: true
-      },
-      toolbox: this.game.toobox,
-    });
+    // this.workspace = Blockly.inject('blocklyDiv', {
+    //   readOnly: false,
+    //   media: '../media/',
+    //   trashcan: true,
+    //   move: {
+    //     scrollbars: true,
+    //     drag: true,
+    //     wheel: true
+    //   },
+    //   toolbox: this.game.toobox,
+    // });
 
-    var bt = document.getElementById('bt');
-    bt.addEventListener('click',()=>{
-      console.log("the code:\n");
-    console.log(Blockly.JavaScript.workspaceToCode(this.workspace));
-    })
-    
+    // tslint:disable-next-line: prefer-const
+    // let bt = document.getElementById('bt');
+    // bt.addEventListener('click', () => {
+    //   console.log('the code:\n');
+    //   console.log(Blockly.JavaScript.workspaceToCode(this.workspace));
+    // });
     /*resizable */
     // const blocklyArea = document.getElementById('blocklyArea');
     // const blocklyDiv = document.getElementById('blocklyDiv');
@@ -63,8 +63,7 @@ export class BlocklyComponent implements OnInit {
     //   Blockly.svgResize(this.workspace);
     // };
     //  window.addEventListener('resize', onresize, false);
-  };  
-
+  }
   getGame(): void {
     this.gameId = +this.route.snapshot.paramMap.get('id');
     this.game = this.gameService.getGame(this.gameId);
