@@ -35,6 +35,8 @@ import { VedioRoomComponent } from './components/vedio-room/vedio-room.component
 import { AnimationComponent } from './components/animation/animation.component';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +49,7 @@ import { AnimationComponent } from './components/animation/animation.component';
     QuickStartComponent,
     UserInfoComponent,
     VedioRoomComponent,
-    AnimationComponent
+    AnimationComponent,
   ],
   imports: [
     BrowserModule,
