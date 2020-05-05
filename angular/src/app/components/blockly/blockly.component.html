@@ -4,8 +4,25 @@
         <div id="blocklyDiv"></div>
     </mat-grid-tile>
 
-    <mat-grid-tile colspan="4" rowspan="3">Game description here
-        <button id="bt">运行</button>
+    <mat-grid-tile colspan="4" rowspan="3" style="overflow: scroll;">
+        <div id="game_info">
+            <p class="title">
+                {{game.name}}
+            <p>
+            <p [innerHTML]="game.description"> </p>
+            <p class="hint">
+                {{game.hint}}
+            </p> 
+            <div id="action">
+                <button mat-raised-button color="primary" id="bt_clear">重置</button>
+                <button mat-raised-button color="primary" id="bt_save">保存</button>
+                <button mat-raised-button color="primary" id="bt_run">运行</button>
+                <button mat-stroked-button id="bt_last" [disabled]="gameId==0? true : false">上一关</button>
+                <button mat-stroked-button id="bt_next" [disabled]="gameId==1? true : false">下一关</button>
+            </div>
+        </div> 
+        
+        
     </mat-grid-tile>
     
     <mat-grid-tile colspan="3" rowspan="7">
