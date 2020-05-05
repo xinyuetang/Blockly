@@ -1,6 +1,9 @@
 package controller;
 
 import bean.UserEntity;
+import bean.messageBean.InformationMessage;
+import bean.messageBean.LoginMessage;
+import bean.messageBean.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,52 +23,88 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/signin",method = RequestMethod.POST)
-    public String signin(@RequestParam(value = "userName",required = false) String name,
+    @RequestMapping(value = "/data/user/register",method = RequestMethod.POST)
+    public Message signin(@RequestParam(value = "userName",required = false) String name,
                          @RequestParam(value = "password",required = false) String pwd){
-        System.out.println("name="+name+"   pwd="+pwd);
+        Message message = new Message();
         if(name == null || pwd == null || "".equals(name) || "".equals(pwd)){
-            return "fail";
+            message.setResult(false);
+            message.setMessage("用户名和密码不能为空。");
+            return message;
         }
         if(userService.selectUserByName(name)!=null){
-            return "fail";
+            message.setResult(false);
+            message.setMessage("用户名已被使用。");
+            return message;
         }
         UserEntity user = new UserEntity();
         user.setName(name);
         user.setPwd(pwd);
         if(userService.insertUser(user)!=0){
-            return "success";
+            message.setResult(true);
+            return message;
         }
-
-        return "fail";
+        message.setResult(false);
+        return message;
     }
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public String login(@RequestParam(value = "userName",required = false) String name,
+    @RequestMapping(value = "/data/user/login",method = RequestMethod.GET)
+    public Message login(@RequestParam(value = "userName",required = false) String name,
                          @RequestParam(value = "password",required = false) String pwd,
                         HttpSession session){
-        System.out.println("name="+name+"   pwd="+pwd);
+        Message message = new Message();
         if(name == null && pwd == null){
-            return "fail";
+            message.setResult(false);
+            message.setMessage("用户名和密码不能为空。");
+            return message;
         }
         if(userService.selectUserByName(name)==null){
-            return "fail";
+            message.setResult(false);
+            message.setMessage("用户不存在。");
+            return message;
         }
         System.out.println(session.getAttribute("user"));
         UserEntity user = userService.selectUserByName(name);
         if(user.getPwd().equals(pwd)){
-            session.setAttribute("user",user);  //用session保存了登录的用户
-            return "success";
+            session.setAttribute("userId",user.getId());  //用session保存了登录的用户
+            LoginMessage loginMessage = new LoginMessage();
+            loginMessage.setResult(true);
+            loginMessage.setUserId(user.getId());
+            return loginMessage;
         }
-        return "fail";
+        message.setResult(false);
+        message.setMessage("用户名或密码错误。");
+        return message;
     }
 
-    @RequestMapping("/logout")
-    public String logout(HttpSession session){
-        if(session.getAttribute("user")!=null){
-            session.removeAttribute("user");
-            return "success";
+    @RequestMapping(value = "/data/user/logout",method = RequestMethod.GET)
+    public Message logout(HttpSession session){
+        Message message = new Message();
+        if(session.getAttribute("userId")!=null){
+            session.removeAttribute("userId");
+            message.setResult(true);
+            return message;
         }
-        return "fail";
+        message.setResult(false);
+        message.setMessage("用户未登录。");
+        return message;
+    }
+
+    @RequestMapping(value = "/data/user/information",method = RequestMethod.GET)
+    public Message information(HttpSession session){
+        if(session.getAttribute("userId")!=null){
+            int userId = (int)session.getAttribute("userId");
+            UserEntity userEntity = userService.selectUserById(userId);
+            InformationMessage informationMessage = new InformationMessage();
+            informationMessage.setResult(true);
+            informationMessage.setUserName(userEntity.getName());
+            informationMessage.setAvatar(userEntity.getAvatar());
+            informationMessage.setEmail(userEntity.getEmail());
+            return informationMessage;
+        }
+        Message message = new Message();
+        message.setResult(false);
+        message.setMessage("用户未登录。");
+        return message;
     }
 }

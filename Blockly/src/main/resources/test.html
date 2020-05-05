@@ -6,7 +6,13 @@
 </head>
 <body>
 
-    <form method="post" action="http://localhost:8080/login">
+    <form method="get" action="http://localhost:8080/data/user/login">
+        <input type="text" name="userName">
+        <input type="password" name="password">
+        <input type="submit">
+    </form>
+
+    <form method="get" action="http://localhost:8080/data/user/information">
         <input type="text" name="userName">
         <input type="password" name="password">
         <input type="submit">

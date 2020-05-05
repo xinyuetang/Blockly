@@ -11,6 +11,9 @@ public interface UserMapper {
     @Select("select * from user where name = #{name}")
     public UserEntity selectUserByName(String name);
 
-    @Insert("insert into user(name,pwd) values (#{name},#{pwd})")
+    @Select("select * from user where id = #{id}")
+    public UserEntity selectUserById(int id);
+
+    @Insert("insert into user(name,pwd,email,avatar) values (#{name},#{pwd},#{email},#{avatar})")
     public int insertUser(UserEntity user);
 }

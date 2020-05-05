@@ -18,6 +18,10 @@ public class UserService{
         return userMapper.selectUserByName(name);
     }
 
+    public UserEntity selectUserById(int id) {
+        return userMapper.selectUserById(id);
+    }
+
     public int insertUser(UserEntity user){
         return userMapper.insertUser(user);
     }
