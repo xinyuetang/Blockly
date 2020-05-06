@@ -1,9 +1,9 @@
-import { Component, OnInit,ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation, OnDestroy,Inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { GameService } from '../../services/game.service';
 import { IGame } from 'src/app/models/game';
-
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 // import * as Blockly from 'blockly';
 declare var Blockly: any;
 
@@ -20,24 +20,58 @@ declare var Blockly: any;
   template: '<p class="emphasize" [innerHTML]="someHtmlCode"></p>',
   encapsulation: ViewEncapsulation.None,
 })
-export class BlocklyComponent implements OnInit {
+
+
+export class BlocklyComponent implements OnInit, OnDestroy {
   gameId: number;
   game: IGame;
   workspace: any;
+  gameList: IGame[];
   private someHtmlCode = '';
+  navigationSubscription: any;
 
-  
+
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private gameService: GameService,
-    private location: Location)
-    {
-      this.getGame();
-      this.someHtmlCode= '<p [innerHTML]="game.description">';
+    public dialog: MatDialog) {
+    this.someHtmlCode = '<p [innerHTML]="game.description">';
+
+    this.navigationSubscription = this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        this.refresh();
+      }
+    });
+
+  };
+
+  refresh() {
+    this.getGame();
+    if (this.workspace) {
+      this.workspace.clear();
+      this.workspace.updateToolbox(this.game.toobox);
+    }
+    
+    //若有历史记录
+    if (this.game.xmlData) {
+      Blockly.Xml.domToWorkspace(
+        Blockly.Xml.textToDom(this.game.xmlData),
+        this.workspace
+      );
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
   }
 
 
   ngOnInit(): void {
+    this.gameList = this.gameService.gameList;
+    this.getGame();
     this.workspace = Blockly.inject('blocklyDiv', {
       readOnly: false,
       media: '../media/',
@@ -47,33 +81,17 @@ export class BlocklyComponent implements OnInit {
         drag: true,
         wheel: true
       },
-      toolbox: this.game.toobox,
+      maxBlocks: 20,
+      toolbox: this.game.toobox
     });
-
     //若有历史记录
     if (this.game.xmlData) {
-      this.workspace.clear();
       Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(this.game.xmlData),
         this.workspace
       );
     }
 
-    let bt_run = document.getElementById('bt_run');
-    let bt_clear = document.getElementById('bt_clear');
-    let bt_save  = document.getElementById('bt_save');
-
-    bt_run.addEventListener('click', () => {
-      let code = Blockly.JavaScript.workspaceToCode(this.workspace);
-      console.log(code);
-      this.game.run(code);
-      this.saveGame();
-    });
-
-    bt_clear.addEventListener('click',()=>{
-      this.workspace.clear();
-      this.saveGame();
-    });
 
     /*resizable */
     // const blocklyArea = document.getElementById('blocklyArea');
@@ -97,19 +115,66 @@ export class BlocklyComponent implements OnInit {
     // };
     //  window.addEventListener('resize', onresize, false);
   }
+
+
+
   getGame(): void {
     this.gameId = +this.route.snapshot.paramMap.get('id');
     this.game = this.gameService.getGame(this.gameId);
+    this.gameService.getHistory(this.gameId).subscribe((data) => {
+      this.game.xmlData = data.history;
+    });
   }
-  saveGame(): void {
+
+  run() {
+    let code = Blockly.JavaScript.workspaceToCode(this.workspace);
+    let ispass = this.game.run(code);
+    this.openDialog(ispass);
+    console.log(code);
+  }
+  clear(): void {
+    this.workspace.clear();
+    console.log("cleared")
+  }
+  save(): void {
     this.game.xmlData = Blockly.Xml.domToText(
       Blockly.Xml.workspaceToDom(this.workspace)
     );
-    console.log(this.game.xmlData);
+    this.gameService.saveHistory(this.gameId, this.game.xmlData);
     console.log('saving the program - ', JSON.stringify(this.game.name));
-    //this.programService.upsertOne(this.program);
+
+  }
+  last() {
+    this.router.navigate(['/game/' + (this.gameId - 1)]);
+  }
+  next() {
+    this.router.navigate(['/game/' + (this.gameId + 1)]);
+  }
+  openDialog(ispass:boolean): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '350px',
+      data: {ispass:ispass}
+    });
   
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed');
+    //   this.animal = result;
+    // });
   }
 }
 
+
+@Component({
+  selector: 'app-dialog',
+  templateUrl: './dialog.html',
+})
+export class DialogComponent {
+  constructor(
+    // public dialogRef: MatDialogRef<DialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+  // onNoClick(): void {
+  //   this.dialogRef.close();
+  // }
+
+}
 

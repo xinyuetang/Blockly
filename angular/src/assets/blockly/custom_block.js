@@ -63,7 +63,8 @@ Blockly.defineBlocksWithJsonArray([
             "type": "field_number",
             "name": "TIMES",
             "value": 0,
-            "min": 0
+            "min": 0,
+            "check": "Number"
           },
           {
             "type": "input_dummy"
@@ -80,31 +81,35 @@ Blockly.defineBlocksWithJsonArray([
 ]
 );
 Blockly.JavaScript['game1_loop'] = function(block){
-    var loop_content = Blockly.JavaScript.statementToCode(block, 'DO');
+    var loop_content = Blockly.JavaScript.statementToCode(block, 'DO').trim();
     var times  = block.getFieldValue('TIMES');
 
-}
-Blockly.JavaScript['game1_pick'] = function (block) {
-    // TODO: Assemble JavaScript into code variable.
-    var code = '1';
+    let code = "";
+    for(let i=0;i<times;i++){
+        code += loop_content;
+    }
     return code;
+
+}
+Blockly.JavaScript['game1_pick'] = function (block) {    
+    return '1';
 };
 Blockly.JavaScript['game1_put'] = function (block) {
-    // TODO: Assemble JavaScript into code variable.
-    var code = '0';
-    return code;
+    return '2';
 };
-
+Blockly.JavaScript['game1_pick_from_table'] = function (block) {
+    return '3';
+};
+Blockly.JavaScript['game1_put_to_table'] = function (block) {
+    return '4';
+};
+//判断结果是否为‘141232’*3遍
 
 
 Blockly.JavaScript['game0_pick'] = function (block) {
-    // TODO: Assemble JavaScript into code variable.
-    var code = '1';
-    return code;
+    return '1';
 };
 Blockly.JavaScript['game0_put'] = function (block) {
-    // TODO: Assemble JavaScript into code variable.
-    var code = '0';
-    return code;
+    return '0';
 };
 //判断结果是否为‘101010’

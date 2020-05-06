@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { IGame } from '../models/game';
-
+import { History } from '../models/history';
+import { Observable, of } from 'rxjs'; // 服务端获取数据异步处理
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   gameList: IGame[];
-  constructor() {
+  private historyUrl = 'api/history';
+  private httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
+  constructor(private http: HttpClient) {
     this.gameList = [
       {
         id: 0, name: "收发室初级",
@@ -33,7 +40,7 @@ export class GameService {
   由于你上次的出色表现，科长决定让你来整理这些<span class='emphasize'>失序的</span>信件。\n \
   相信你已经注意到了，这些信件中<span class='emphasize'>每两个信件之间</span>的顺序被<span class='emphasize'>颠倒</span>了，\
   那么希望你借助新置办的<span class='emphasize'>办公桌</span>将这些信件在发放处排列好。" , 
-        hint: "Hint： 注意手中只能拿一封信件，若再拿一封，则前一封会被丢弃。",
+        hint: "Hint： 为了帮助你完成任务，我偷偷给你加入了魔法动作哦，记得使用。注意办公桌现在还只能放一封信件。",
         toobox:"<xml>"+
         "<category name='基本动作' colour='240'>"+
         "<block type='game1_pick'></block>"+
@@ -50,7 +57,7 @@ export class GameService {
         level:"中等",
         url:"/game/1",
         run: function(code: string):boolean{
-          return (code=="101010");
+          return (code=="141232141232141232");
         }
       }
     ];
@@ -62,13 +69,16 @@ export class GameService {
   getGameList():IGame[] {
     return this.gameList;
   }
-  // upsertGame(program: IGame): void {
-  //   const tmp: IGame = this.getGame(program.id);
-  //   if (tmp) {
-  //     tmp.xmlData = program.xmlData;
-  //   } else {
-  //     this.programList.push(program);
-  //   }
-  // }
+
+  getHistory(gameId: number):Observable<History> {
+    const url = `${this.historyUrl}/${gameId}`;
+    return this.http.get<History>(url);
+  }
+
+  saveHistory(gameId: number, his: string):Observable<History>{
+    const history = {id: gameId, userID:1,gameID: gameId,history:his};
+    return this.http.post<History>(this.historyUrl, history, this.httpOptions);
+ 
+  }
 
 }

@@ -19,12 +19,13 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
+import {MatDialogModule,MAT_DIALOG_DEFAULT_OPTIONS} from'@angular/material/dialog'
 
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './components/header/header.component';
-import { BlocklyComponent } from './components/blockly/blockly.component';
+import { BlocklyComponent, DialogComponent} from './components/blockly/blockly.component';
 import { HomeComponent } from './components/home/home.component';
 import { ListOfGamesComponent} from './components/list-of-games/list-of-games.component';
 import { QuickStartComponent } from './components/quick-start/quick-start.component';
@@ -37,11 +38,13 @@ import { AnimationComponent } from './components/animation/animation.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     BlocklyComponent,
+    DialogComponent,
     ListOfGamesComponent,
     HomeComponent,
     LoginComponent,
@@ -71,9 +74,13 @@ import { AnimationComponent } from './components/animation/animation.component';
     MatButtonModule,
     MatTabsModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatDialogModule
   ],
-  providers: [],
+  entryComponents: [
+    DialogComponent  
+  ],
+  providers: [{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
   bootstrap: [AppComponent],
   exports: [BlocklyComponent],
 })

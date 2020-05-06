@@ -14,11 +14,11 @@
                 {{game.hint}}
             </p> 
             <div id="action">
-                <button mat-raised-button color="primary" id="bt_clear">重置</button>
-                <button mat-raised-button color="primary" id="bt_save">保存</button>
-                <button mat-raised-button color="primary" id="bt_run">运行</button>
-                <button mat-stroked-button id="bt_last" [disabled]="gameId==0? true : false">上一关</button>
-                <button mat-stroked-button id="bt_next" [disabled]="gameId==1? true : false">下一关</button>
+                <button mat-raised-button color="primary" (click)="clear()">重置</button>
+                <button mat-raised-button color="primary" (click)="save()">保存</button>
+                <button mat-raised-button color="primary" (click)="run()">运行</button>
+                <button mat-stroked-button (click)="last()"  [disabled]="gameId==0? true : false">上一关</button>
+                <button mat-stroked-button (click)="next()"  [disabled]="gameId==1? true : false">下一关</button>
             </div>
         </div> 
         
