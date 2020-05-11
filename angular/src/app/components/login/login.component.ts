@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart, NavigationCancel, NavigationError, RoutesRecognized } from '@angular/router';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material/icon';
+declare var homeShow: (container, output) => any;
 
 @Component({
   selector: 'app-login',
@@ -28,9 +29,33 @@ export class LoginComponent implements OnInit {
   loginResult: boolean;
   userID: number;
 
-  constructor(private userService: UserService, private router: Router) { }
+  navigationSubscription: any;
 
-  ngOnInit(): void {}
+  constructor(private userService: UserService, private router: Router) {
+    this.navigationSubscription = this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        // console.log('Router方式:', event.url.substr(1));
+        this.render();
+      }
+    });
+  }
+
+  render() {
+    const container = document.getElementById('login_container');
+    const output = document.getElementById('login_output');
+    homeShow(container, output);
+  }
+
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngOnDestroy() {
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+  }
+
+  ngOnInit(): void {
+    this.render();
+  }
 
   onClear() {
     this.userName.patchValue('');
@@ -51,7 +76,7 @@ export class LoginComponent implements OnInit {
         this.userID = user.id;
         console.log('login successfully');
         console.log(user);
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       } else {
         this.loginResult = false;
         console.log('fail to login');

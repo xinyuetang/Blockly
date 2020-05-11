@@ -1,35 +1,42 @@
-<mat-card class="card">
+<div id="login_container" class="container">
+  <div id="login_output" class="container"></div>
+  <div class="wrapper">
 
-  <mat-card-header>
-    <mat-card-title class="title">Login</mat-card-title>
-    <mat-card-subtitle>new here? 
-      <a routerLink="/register">create an account</a>
-    </mat-card-subtitle>
-  </mat-card-header>
+    <mat-card class="card">
 
-  <mat-card-content>
-    <form class="form">
-      <!-- (ngSubmit)="onSubmit()" -->
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Enter your userName</mat-label>
-        <input matInput [formControl]="userName">
-        <mat-error *ngIf="userName.invalid">{{getUserNameErrorMessage()}}</mat-error>
-      </mat-form-field>
-      <p></p>
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Enter your password</mat-label>
-        <input matInput [formControl]="password" [type]="hide ? 'password' : 'text'">
-        <button mat-icon-button matSuffix (click)="hide = !hide">
-          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-        <mat-error *ngIf="password.invalid">{{getPasswordErrorMessage()}}</mat-error>
-      </mat-form-field>
-      <p></p>
+      <mat-card-header>
+        <mat-card-title class="title">Login</mat-card-title>
+        <mat-card-subtitle>new here?
+          <a routerLink="/register">create an account</a>
+        </mat-card-subtitle>
+      </mat-card-header>
 
-      <button mat-raised-button color="primary" (click)="onClear()">Clear</button>
-      <button mat-raised-button color="primary" [disabled]="!userName.valid||!password.valid"
-        (click)="onSubmit()">Login</button>
+      <mat-card-content>
+        <form class="form">
+          <!-- (ngSubmit)="onSubmit()" -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Enter your userName</mat-label>
+            <input matInput [formControl]="userName">
+            <mat-error *ngIf="userName.invalid">{{getUserNameErrorMessage()}}</mat-error>
+          </mat-form-field>
+          <p></p>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Enter your password</mat-label>
+            <input matInput [formControl]="password" [type]="hide ? 'password' : 'text'">
+            <button mat-icon-button matSuffix (click)="hide = !hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="password.invalid">{{getPasswordErrorMessage()}}</mat-error>
+          </mat-form-field>
+          <p></p>
 
-    </form>
-  </mat-card-content>
-</mat-card>
+          <button mat-raised-button color="primary" (click)="onClear()">Clear</button>
+          <button mat-raised-button color="primary" [disabled]="!userName.valid||!password.valid"
+            (click)="onSubmit()">Login</button>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

@@ -1,0 +1,54 @@
+.animationDIV {
+  width: 500px;
+  height: 360px;
+  background-color: azure;
+}
+
+.wrap {
+  display: flex;
+  justify-content: space-between;
+  background-image: url('../../../assets/img/floor.png');
+  background-size: cover;
+}
+
+.left,
+.right,
+.middle {
+  height: 350px;
+}
+
+.left {
+  width: 80px;
+  background: rgb(255, 255, 255, 0);
+}
+
+.right {
+  width: 80px;
+  background: rgb(255, 255, 255, 0);
+}
+
+.middle {
+  background: rgb(255, 255, 255, 0);
+  width: 100%;
+  margin: 10px;
+  padding: 10px;
+}
+
+.desk {
+  transform: translate(130px, 0px);
+}
+
+#letterA, #letterB, #letterC {
+  width: 50px;
+  height: 50px;
+}
+
+#letterF0, #letterE, #letterO, #letterF1, #letterT, #letterR{
+  width: 40px;
+  height: 40px;
+}
+
+#employee {
+  width: 50px;
+  transform: translate(130px, 200px);
+}
