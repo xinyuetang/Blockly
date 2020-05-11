@@ -1,1 +1,47 @@
-<p>animation works!</p>
+<!-- *ngIf="data.ispass==true"  -->
+
+<div class="animationDIV">
+
+  <div class="wrap" *ngIf="gameID==0">
+    <div class="left">
+      <mat-list>
+        <mat-list-item> <span style="width: 50px;">接收方</span> </mat-list-item>
+        <mat-list-item style="margin: 10px 0;"> <img id='letterA' src="../../../assets/img/A.png"> </mat-list-item>
+        <mat-list-item style="margin: 10px 0;"> <img id='letterB' src="../../../assets/img/B.png"> </mat-list-item>
+        <mat-list-item style="margin: 10px 0;"> <img id='letterC' src="../../../assets/img/C.png"> </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="middle">
+      <img id='employee' src="../../../assets/img/employee.png" />
+    </div>
+    <div class="right">
+      <mat-list>
+        <mat-list-item> <span style="width: 50px;">发送方</span> </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+
+  <div class="wrap" *ngIf="gameID==1">
+    <div class="left">
+      <mat-list>
+        <mat-list-item> <span style="width: 50px;">接收方</span> </mat-list-item>
+        <mat-list-item> <img id='letterF0' src="../../../assets/img/F.png"> </mat-list-item>
+        <mat-list-item> <img id='letterE' src="../../../assets/img/E.png"> </mat-list-item>
+        <mat-list-item> <img id='letterO' src="../../../assets/img/O.png"> </mat-list-item>
+        <mat-list-item> <img id='letterF1' src="../../../assets/img/F.png"> </mat-list-item>
+        <mat-list-item> <img id='letterT' src="../../../assets/img/T.png"> </mat-list-item>
+        <mat-list-item> <img id='letterR' src="../../../assets/img/R.png"> </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="middle">
+      <div class="desk"> <span style="width: 50px;">办公桌</span> </div>
+      <img id='employee' src="../../../assets/img/employee.png" />
+    </div>
+    <div class="right">
+      <mat-list>
+        <mat-list-item> <span style="width: 50px;">发送方</span> </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+
+</div>

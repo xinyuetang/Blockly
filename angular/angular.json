@@ -57,7 +57,12 @@
               "node_modules/blockly/blockly.js",
                "node_modules/blockly/blocks.js",
                "node_modules/blockly/javascript.js",
-               "src/assets/blockly/custom_block.js"
+               "src/assets/blockly/custom_block.js",
+               "src/assets/home/dat.gui.min.js",
+               "src/assets/home/fss.min.js",
+               "src/assets/home/home.js",
+               "src/assets/animation/tween.min.js",
+               "src/assets/animation/animation.js"
             ]
           },
           "configurations": {

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, NavigationEnd, NavigationStart } from '@angular/router';
 import { forbiddenNameValidator, confirmPasswordValidator } from 'src/app/services/user-validator.directive';
-
+declare var homeShow: (container, output) => any;
 
 
 
@@ -35,9 +35,33 @@ export class RegisterComponent implements OnInit {
   registerResult: boolean;
   userID: number;
 
-  constructor(private userService: UserService, private router: Router) { }
+  navigationSubscription: any;
 
-  ngOnInit(): void {}
+  constructor(private userService: UserService, private router: Router) {
+    this.navigationSubscription = this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        // console.log('Router方式:', event.url.substr(1));
+        this.render();
+      }
+    });
+  }
+
+  render() {
+    const container = document.getElementById('register_container');
+    const output = document.getElementById('register_output');
+    homeShow(container, output);
+  }
+
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngOnDestroy() {
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+  }
+
+  ngOnInit(): void {
+    this.render();
+  }
 
   getPassword(){
     return this.password.value;

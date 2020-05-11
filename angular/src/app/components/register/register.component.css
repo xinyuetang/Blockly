@@ -1,24 +1,39 @@
+.container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper {
+  transition: opacity 0.4s ease-out;
+  position: absolute;
+  width: 850px;
+  left: 25%;
+}
+
 .card {
-    max-width: 600px;
-    margin: 0 auto;
-    margin-top: 100px;
-  }
-  
-  .title {
-    color: #3f51b5;
-    font-weight: bold;
-  }
-  .form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-    margin: 0 auto;
-  }
-  
-  .full-width {
-    width: 100%;
-  }
-  
-  button {
-    margin: 10px 20px;
-  }
+  background: rgba(255, 255, 255, 0.9);
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.title {
+  color: #3f51b5;
+  font-weight: bold;
+}
+
+.form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+button {
+  margin: 10px 20px;
+}

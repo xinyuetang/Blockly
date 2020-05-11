@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy,Inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy,Inject, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { GameService } from '../../services/game.service';
 import { IGame } from 'src/app/models/game';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { AnimationComponent } from '../animation/animation.component';
 // import * as Blockly from 'blockly';
 declare var Blockly: any;
 
@@ -23,12 +24,6 @@ declare var Blockly: any;
 
 
 export class BlocklyComponent implements OnInit, OnDestroy {
-  gameId: number;
-  game: IGame;
-  workspace: any;
-  gameList: IGame[];
-  private someHtmlCode = '';
-  navigationSubscription: any;
 
 
   constructor(
@@ -45,6 +40,16 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     });
 
   };
+  gameId: number;
+  game: IGame;
+  workspace: any;
+  gameList: IGame[];
+  private someHtmlCode = '';
+  navigationSubscription: any;
+
+
+  @ViewChild('animation')
+  animation: AnimationComponent;
 
   refresh() {
     this.getGame();
@@ -67,7 +72,6 @@ export class BlocklyComponent implements OnInit, OnDestroy {
       this.navigationSubscription.unsubscribe();
     }
   }
-
 
   ngOnInit(): void {
     this.gameList = this.gameService.gameList;
@@ -128,13 +132,18 @@ export class BlocklyComponent implements OnInit, OnDestroy {
 
   run() {
     let code = Blockly.JavaScript.workspaceToCode(this.workspace);
+    console.log(code);
     let ispass = this.game.run(code);
     this.openDialog(ispass);
     console.log(code);
+    this.animation.run(code);
   }
+
+
   clear(): void {
     this.workspace.clear();
-    console.log("cleared")
+    console.log('cleared');
+    this.animation.clear();
   }
   save(): void {
     this.game.xmlData = Blockly.Xml.domToText(

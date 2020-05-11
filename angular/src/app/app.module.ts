@@ -19,7 +19,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
-import {MatDialogModule,MAT_DIALOG_DEFAULT_OPTIONS} from'@angular/material/dialog'
+import {MatDialogModule,MAT_DIALOG_DEFAULT_OPTIONS} from'@angular/material/dialog';
+import {MatListModule} from '@angular/material/list';
 
 
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { VedioRoomComponent } from './components/vedio-room/vedio-room.component';
 import { AnimationComponent } from './components/animation/animation.component';
+
 
 
 
@@ -75,7 +77,8 @@ import { AnimationComponent } from './components/animation/animation.component';
     MatTabsModule,
     MatTableModule,
     MatSortModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule
   ],
   entryComponents: [
     DialogComponent  
