@@ -70,12 +70,11 @@ export class LoginComponent implements OnInit {
 
   login(name: string, password: string): void {
     this.userService.login(name, password).subscribe((data) => {
-      const user = data[0];
-      if (user != null) {
+      console.log(data);
+      if (data != null && data.result) {
         this.loginResult = true;
-        this.userID = user.id;
+        this.userID = data.userId;
         console.log('login successfully');
-        console.log(user);
         this.router.navigate(['/home']);
       } else {
         this.loginResult = false;

@@ -81,12 +81,12 @@ export class RegisterComponent implements OnInit {
 
   register(name: string, password: string): void {
     this.userService.register(name, password).subscribe((data) => {
-      const user = data;
-      if (user != null) {
+      console.log(data);
+      if (data != null && data.result) {
         this.registerResult = true;
-        this.userID = user.id;
+        this.userID = data.userId;
         console.log('register successfully');
-        console.log(user);
+        
         this.router.navigate(['/']);
       } else {
         this.registerResult = false;

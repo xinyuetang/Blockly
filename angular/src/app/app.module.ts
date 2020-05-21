@@ -2,8 +2,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import {HttpClientJsonpModule} from '@angular/common/http';
-import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
-import {InMemoryDataService} from './services/in-memory-data.service';
+//import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
+//import {InMemoryDataService} from './services/in-memory-data.service';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -60,9 +60,10 @@ import { AnimationComponent } from './components/animation/animation.component';
     BrowserModule,
     HttpClientJsonpModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    ),
+    // HttpClientInMemoryWebApiModule.forRoot(
+    //   InMemoryDataService, 
+    //   { dataEncapsulation: false }
+    // ),
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,

@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
 import { Record } from '../models/record';
-import { Observable, of } from 'rxjs'; // 服务端获取数据异步处理
+import { Observable, of, from } from 'rxjs'; // 服务端获取数据异步处理
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import * as Global from '../../assets/data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private userUrl = 'api/users';
+  private userUrl = `${Global.server}/data/user`;
   private recordUrl = 'api/records';
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -32,23 +33,18 @@ export class UserService {
   }
 
   // 通过name和password实现登录
-  login(name: string, password: string): Observable<User[]>{
-    const url = `${this.userUrl}/?name=${name}&password=${password}`;
-    return this.http.get<User[]>(url);
+  login(name: string, password: string): Observable<User>{
+    const url = `${this.userUrl}/login?userName=${name}&password=${password}`;
+    return this.http.get<User>(url);
   }
 
   // 通过name、password实现注册
-  register(name: string, password: string): Observable<User>{
-    const user = {id: 4, name, password, date: '2020-04-02'};
-    return this.http.post<User>(this.userUrl, user, this.httpOptions);
+  register(name: string, password: string){
+    const url = `${this.userUrl}/register`;
+    let body = {"userName":name,"password":password};
+    console.log(body);
+    return this.http.post(url, body,this.httpOptions);
   }
-
-
-
-
-
-
-
 
   // 异常处理及报错
   private handleError<T>(operation = 'operation', result?: T) {
