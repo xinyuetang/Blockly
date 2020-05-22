@@ -273,7 +273,7 @@ function homeShow(container, output) {
     FSS.Vector3.set(attractor, event.x, renderer.height - event.y);
     FSS.Vector3.subtract(attractor, center);
     LIGHT.autopilot = !LIGHT.autopilot;
-    autopilotController.updateDisplay();
+    // autopilotController.updateDisplay();
   }
 
   function onMouseMove(event) {
