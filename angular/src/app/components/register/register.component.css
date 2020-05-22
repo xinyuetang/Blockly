@@ -37,3 +37,10 @@
 button {
   margin: 10px 20px;
 }
+
+.error {
+  color: #e95500cb;
+  font-weight: bold;
+  font-size: larger;
+  margin: 5px 40px 20px 70px;
+}
