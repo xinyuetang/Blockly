@@ -12,33 +12,45 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class UserInfoComponent implements OnInit {
 
-  userID: number;
+  // 获取用户信息结果
   userName: string;
-  registerDate: string;
-
-  records: Record[];
-  displayedColumns: string[] = ['gameID', 'name', 'date', 'time', 'status'];
-  dataSource: MatTableDataSource<Record>;
+  avatar: string;
+  email: string;
+  // 获取用户操作记录结果
+  records: [];
+  // 用户操作记录展示
+  displayedColumns: string[] = ['gameId', 'date', 'time', 'status'];
+  dataSource: MatTableDataSource<any>;
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.getUser(1);
-    this.getRecords(1);
+    this.getInformation();
+    this.getRecords();
   }
 
-  getUser(id: number): void {
-    this.userService.getUser(id).subscribe((user) => {
-      this.userID = user.id;
-      this.userName = user.name;
-      this.registerDate = user.date;
+  getInformation(): void {
+    this.userService.getInformation().subscribe((data) => {
+      console.log(data);
+      if (data != null && data.result === true) {
+        this.userName = data.userName;
+        this.avatar = data.avatar;
+        this.email = data.email;
+      } else {
+        alert('用户信息获取失败，' + data.message);
+      }
     });
   }
 
-  getRecords(id: number): void {
-    this.userService.getRecords(id).subscribe((records) => {
-      this.records = records;
-      this.dataSource = new MatTableDataSource(records);
+  getRecords(): void {
+    this.userService.getRecords().subscribe((data) => {
+      console.log(data);
+      if (data != null && data.result === true) {
+        this.records = data.records;
+        this.dataSource = new MatTableDataSource(this.records);
+      } else {
+        alert('操作记录获取失败，' + data.message);
+      }
     });
   }
 
@@ -46,7 +58,4 @@ export class UserInfoComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-
-
 }

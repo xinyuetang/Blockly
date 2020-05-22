@@ -13,13 +13,14 @@
 
       <mat-card-content>
         <form class="form">
-          <!-- (ngSubmit)="onSubmit()" -->
+          
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Enter your userName</mat-label>
             <input matInput [formControl]="userName">
             <mat-error *ngIf="userName.invalid">{{getUserNameErrorMessage()}}</mat-error>
           </mat-form-field>
           <p></p>
+
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Enter your password</mat-label>
             <input matInput [formControl]="password" [type]="hide ? 'password' : 'text'">
@@ -31,11 +32,14 @@
           <p></p>
 
           <button mat-raised-button color="primary" (click)="onClear()">Clear</button>
-          <button mat-raised-button color="primary" [disabled]="!userName.valid||!password.valid"
-            (click)="onSubmit()">Login</button>
+          <button mat-raised-button color="primary" [disabled]="!userName.valid||!password.valid" (click)="onSubmit()">Login</button>
 
         </form>
       </mat-card-content>
+
+      <mat-card-footer>
+        <mat-error *ngIf="!result" class="error">{{getLoginErrorMessage()}}</mat-error>
+      </mat-card-footer>
     </mat-card>
 
   </div>

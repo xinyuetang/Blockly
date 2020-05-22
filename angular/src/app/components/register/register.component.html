@@ -13,7 +13,6 @@
 
       <mat-card-content>
         <form class="form">
-          <!-- (ngSubmit)="onSubmit()" -->
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Enter your userName</mat-label>
@@ -24,7 +23,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Enter your password</mat-label>
-            <input matInput [formControl]="password" [type]="hide ? 'password' : 'text'">
+            <input matInput [formControl]="password" [type]="hide ? 'password' : 'text'" (click)="startConfirmValidator()">
             <button mat-icon-button matSuffix (click)="hide = !hide">
               <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
@@ -34,7 +33,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Confirm your password</mat-label>
-            <input matInput [formControl]="confirmPassword" [type]="confirmHide ? 'password' : 'text'">
+            <input matInput [formControl]="confirmPassword" [type]="confirmHide ? 'password' : 'text'" (click)="startConfirmValidator()">
             <button mat-icon-button matSuffix (click)="confirmHide = !confirmHide">
               <mat-icon>{{confirmHide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
@@ -49,6 +48,11 @@
 
         </form>
       </mat-card-content>
+
+      <mat-card-footer>
+        <mat-error *ngIf="!result" class="error">{{getRegisterErrorMessage()}}</mat-error>
+      </mat-card-footer>
+
     </mat-card>
 
   </div>

@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
   }
 
   onStart() {
-    this.router.navigate(['/quick-start']);
+    this.router.navigate(['/list-of-games']);
   }
 
 }

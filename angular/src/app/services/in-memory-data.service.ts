@@ -19,13 +19,12 @@ export class InMemoryDataService implements InMemoryDbService {
       {id: 4, userID: 1, gameID: 3, name: '收发室高级', date: '2020-04-03', time: '17:00:00', status: false},
       {id: 5, userID: 3, gameID: 3, name: '收发室高级', date: '2020-04-03', time: '17:00:00', status: false},
     ];
-    const history =   [
-      {id: 0, userID:1,gameID: 0,history:""},
-      {id: 1, userID:1,gameID: 1,history:""}
+    const history = [
+      {id: 0, userID: 1, gameID: 0, history: ''},
+      {id: 1, userID: 1, gameID: 1, history: ''}
+    ];
 
-    ]
-    
-    return {users, records,history};
+    return {users, records, history};
   }
 
   genId(users: User[]): number {
