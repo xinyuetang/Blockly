@@ -5,4 +5,4 @@ CREATE TABLE `record`(
   `time` CHAR(255) NOT NULL ,
   `status` BOOLEAN NOT NULL DEFAULT FALSE ,
   FOREIGN KEY (userId) REFERENCES user(id)
-)
+) 

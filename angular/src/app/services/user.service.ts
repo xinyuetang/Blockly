@@ -4,13 +4,14 @@ import { Record } from '../models/record';
 import { Observable, of, from } from 'rxjs'; // 服务端获取数据异步处理
 import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import * as Global from '../../assets/data';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private userUrl = 'api/users';
+  private userUrl = `${Global.server}/data/user`;
   private recordUrl = 'api/records';
   private httpOptions = {
     headers: new HttpHeaders({
