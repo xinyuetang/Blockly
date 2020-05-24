@@ -134,9 +134,10 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     let code = Blockly.JavaScript.workspaceToCode(this.workspace);
     console.log(code);
     let ispass = this.game.run(code);
-    this.openDialog(ispass);
-    console.log(code);
-    this.animation.run(code);
+    //console.log(code);
+    this.animation.run(code);//运行动画
+    this.openDialog(ispass);//展出结果对话框
+    this.gameService.addRecord(this.gameId,ispass);//添加游戏记录
   }
 
 

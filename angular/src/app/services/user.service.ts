@@ -8,8 +8,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService {
-
-  // private userUrl = `${Global.server}/data/user`;
   private userUrl = '/data/user';
   private httpOptions = {
     headers: new HttpHeaders({
