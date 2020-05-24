@@ -84,7 +84,7 @@ export class RegisterComponent implements OnInit {
       if (data != null && data.result === true) {
         this.result = data.result;
         this.message = data.message;
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       }else{
         this.result = data.result;
         this.message = data.message;

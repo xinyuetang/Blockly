@@ -1,10 +1,21 @@
-
-.links{
-    right: 10px;
-    position: absolute;
+h1 {
+  color: #FFF;
+  font-size: xx-large;
+  margin: 10px;
 }
-a{
-    margin: 10px;
-    text-decoration: none;
-    color: #FFF;
+
+.links {
+  right: 10px;
+  position: absolute;
+}
+
+a {
+  margin: 0 10px;
+  /* text-align: center; */
+  text-decoration: none;
+  color: #FFF;
+}
+
+.icon {
+  margin-right: 5px;
 }
