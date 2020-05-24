@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { IGame } from '../models/game';
-import { History } from '../models/history';
-import { Observable, of } from 'rxjs'; // 服务端获取数据异步处理
+import { Observable} from 'rxjs'; // 服务端获取数据异步处理
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {DatePipe} from "@angular/common";
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class GameService {
   gameList: IGame[];
-  private historyUrl = 'api/history';
+  private historyUrl = '/data/game';
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private datePipe:DatePipe) {
     this.gameList = [
       {
         id: 0, name: "收发室初级",
@@ -69,16 +71,27 @@ export class GameService {
   getGameList():IGame[] {
     return this.gameList;
   }
-
-  getHistory(gameId: number):Observable<History> {
-    const url = `${this.historyUrl}/${gameId}`;
-    return this.http.get<History>(url);
+  //获取游戏场景
+  getHistory(gameId: number):Observable<any>{
+    const url = `${this.historyUrl}/load?gameId=${gameId}`;
+    return this.http.get(url);
   }
-
-  saveHistory(gameId: number, his: string):Observable<History>{
-    const history = {id: gameId, userID:1,gameID: gameId,history:his};
-    return this.http.post<History>(this.historyUrl, history, this.httpOptions);
- 
+  //存储游戏场景
+  saveHistory(gameId: number, his: string):Observable<any>{
+    const url = `${this.historyUrl}/save`;
+    const param= `gameId=${gameId}&history=${his}`;
+    return this.http.post(url, param, this.httpOptions);
+  }
+  //保存游戏记录
+  addRecord(gameId:number,status: boolean):Observable<any>{
+    let date = new Date();
+    let day = this.datePipe.transform(date, 'yyyy-MM-dd');
+    let time  = this.datePipe.transform(date, 'HH:mm:ss');
+    const url = `/data/user/record`;
+    const param=`gameId=${gameId}&date=${day}&time=${time}&status=${status}`;
+    console.log(day);
+    console.log(time);
+    return this.http.post(url,param,this.httpOptions);
   }
 
 }

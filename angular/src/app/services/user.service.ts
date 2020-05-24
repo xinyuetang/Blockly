@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs'; // 服务端获取数据异步处理
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import {DatePipe} from "@angular/common";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  // private userUrl = `${Global.server}/data/user`;
   private userUrl = '/data/user';
   private httpOptions = {
     headers: new HttpHeaders({
@@ -18,7 +16,7 @@ export class UserService {
   };
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private datePipe:DatePipe) {}
 
   // 获取用户个人信息
   getInformation(): Observable<any>{
@@ -39,9 +37,10 @@ export class UserService {
   }
 
   // 通过name、password实现注册
-  register(name: string, pass: string): Observable<any>{
+  register(name: string, pass: string, email: string): Observable<any>{
     const url = this.userUrl + '/register';
-    const param = 'userName=' + name + '&password=' + pass;
+    let date =  this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    const param = 'userName=' + name + '&password=' + pass + '&email=' + email+ '&date=' + date;
     // 参考链接 https://blog.csdn.net/qq_27466827/article/details/82803966
     return this.http.post(url, param, this.httpOptions);
   }

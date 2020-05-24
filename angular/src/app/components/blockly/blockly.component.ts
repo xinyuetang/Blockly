@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy,Inject, ViewChild } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { IGame } from 'src/app/models/game';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnimationComponent } from '../animation/animation.component';
 // import * as Blockly from 'blockly';
 declare var Blockly: any;
@@ -57,7 +56,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
       this.workspace.clear();
       this.workspace.updateToolbox(this.game.toobox);
     }
-    
+
     //若有历史记录
     if (this.game.xmlData) {
       Blockly.Xml.domToWorkspace(
@@ -134,9 +133,12 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     let code = Blockly.JavaScript.workspaceToCode(this.workspace);
     console.log(code);
     let ispass = this.game.run(code);
-    this.openDialog(ispass);
-    console.log(code);
-    this.animation.run(code);
+    //console.log(code);
+    this.animation.run(code);//运行动画
+    this.openDialog(ispass);//展出结果对话框
+    this.gameService.addRecord(this.gameId, ispass).subscribe((data) => {
+      console.log(data);
+    });//添加游戏记录
   }
 
 
@@ -149,8 +151,10 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     this.game.xmlData = Blockly.Xml.domToText(
       Blockly.Xml.workspaceToDom(this.workspace)
     );
-    this.gameService.saveHistory(this.gameId, this.game.xmlData);
-    console.log('saving the program - ', JSON.stringify(this.game.name));
+    this.gameService.saveHistory(this.gameId, this.game.xmlData).subscribe((data)=>{
+      if(data!=null) console.log('saving the program - ', JSON.stringify(this.game.name));
+    });
+    
 
   }
   last() {
@@ -159,16 +163,12 @@ export class BlocklyComponent implements OnInit, OnDestroy {
   next() {
     this.router.navigate(['/game/' + (this.gameId + 1)]);
   }
-  openDialog(ispass:boolean): void {
+  openDialog(ispass: boolean): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '350px',
-      data: {ispass:ispass}
+      data: { ispass: ispass }
     });
-  
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.animal = result;
-    // });
+
   }
 }
 
@@ -179,11 +179,6 @@ export class BlocklyComponent implements OnInit, OnDestroy {
 })
 export class DialogComponent {
   constructor(
-    // public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
-  // onNoClick(): void {
-  //   this.dialogRef.close();
-  // }
-
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 }
 

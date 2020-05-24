@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm, Validat
 import { UserService } from 'src/app/services/user.service';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, NavigationEnd, NavigationStart } from '@angular/router';
 import { forbiddenNameValidator, confirmPasswordValidator } from 'src/app/services/user-validator.directive';
+
 declare var homeShow: (container, output) => any;
 
 
@@ -20,6 +21,8 @@ export class RegisterComponent implements OnInit {
   userName = new FormControl('', [
     Validators.required,
   ]);
+  //用户邮箱必填
+  email = new FormControl('',[Validators.required,Validators.email]);
   // 密码必填，且大于等于6位
   password = new FormControl('', [
     Validators.required,
@@ -75,13 +78,14 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     const name = this.userName.value;
     const password = this.password.value;
-    this.register(name, password);
+    const email  =  this.email.value;
+    this.register(name, password,email);
   }
 
-  register(name: string, password: string): void {
-    this.userService.register(name, password).subscribe((data) => {
+  register(name: string, password: string,email:string): void {
+    this.userService.register(name, password,email).subscribe((data) => {
       console.log(data);
-      if (data != null && data.result === true) {
+      if (data != null && data.result === true){
         this.result = data.result;
         this.message = data.message;
         this.router.navigate(['/login']);
@@ -100,6 +104,13 @@ export class RegisterComponent implements OnInit {
   getUserNameErrorMessage() {
     if (this.userName.hasError('required')) {
       return 'Please enter a valid userName';
+    }
+    return '';
+  }
+// 客户端输入验证-邮箱
+  getEmailErrorMessage() {
+    if (this.email.hasError('required')|| this.email.hasError('email')) {
+      return 'Please enter a valid email';
     }
     return '';
   }
