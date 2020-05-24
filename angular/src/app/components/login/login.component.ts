@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
+import { UserSharedService } from 'src/app/services/userShared.service';
 import { Router, NavigationEnd } from '@angular/router';
 declare var homeShow: (container, output) => any;
 
@@ -29,7 +30,10 @@ export class LoginComponent implements OnInit {
   message: string;
   userId: number;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(
+    private userService: UserService,
+    private userSharedService: UserSharedService,
+    private router: Router) {
     // 监听路由切换
     this.navigationSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -75,11 +79,17 @@ export class LoginComponent implements OnInit {
         this.message = data.message;
         this.userId = data.userId;
         this.router.navigate(['/home']);
+        this.checkLogin();
       }else{
         this.result = data.result;
         this.message = data.message;
       }
     });
+  }
+
+  // 使导航栏获取login情况
+  checkLogin(){
+    this.userSharedService.isLogin.next(true);
   }
 
   // 客户端输入验证-用户名

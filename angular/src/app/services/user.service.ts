@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
-import { Record } from '../models/record';
-import { Observable, of, from } from 'rxjs'; // 服务端获取数据异步处理
-import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
-import * as Global from '../../assets/data';
+import { Observable } from 'rxjs'; // 服务端获取数据异步处理
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private userUrl = `${Global.server}/data/user`;
-  private recordUrl = 'api/records';
+  // private userUrl = `${Global.server}/data/user`;
+  private userUrl = '/data/user';
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -24,25 +22,25 @@ export class UserService {
 
   // 获取用户个人信息
   getInformation(): Observable<any>{
-    const url = `/data/user/information`;
+    const url = `${this.userUrl}/information`;
     return this.http.get(url);
   }
 
   // 获取用户操作记录
   getRecords(): Observable<any>{
-    const url = `/data/user/record`;
+    const url = `${this.userUrl}/record`;
     return this.http.get(url);
   }
 
   // 通过name和password实现登录
   login(name: string, pass: string): Observable<any>{
-    const url = `/data/user/login?userName=${name}&password=${pass}`;
+    const url = `${this.userUrl}/login?userName=${name}&password=${pass}`;
     return this.http.get(url);
   }
 
   // 通过name、password实现注册
   register(name: string, pass: string): Observable<any>{
-    const url = '/data/user/register';
+    const url = this.userUrl + '/register';
     const param = 'userName=' + name + '&password=' + pass;
     // 参考链接 https://blog.csdn.net/qq_27466827/article/details/82803966
     return this.http.post(url, param, this.httpOptions);
@@ -50,7 +48,7 @@ export class UserService {
 
   // 实现登出
   logout(): Observable<any>{
-    const url = `/data/user/logout`;
+    const url = `${this.userUrl}/logout`;
     return this.http.get(url);
   }
 }
