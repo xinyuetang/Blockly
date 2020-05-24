@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { IGame } from '../models/game';
-import { History } from '../models/history';
-import { Observable, of } from 'rxjs'; // 服务端获取数据异步处理
+import { Observable} from 'rxjs'; // 服务端获取数据异步处理
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {DatePipe} from "@angular/common";
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class GameService {
   gameList: IGame[];
   private historyUrl = '/data/game';
@@ -78,7 +79,7 @@ export class GameService {
   //存储游戏场景
   saveHistory(gameId: number, his: string):Observable<any>{
     const url = `${this.historyUrl}/save`;
-    const param= `gameId=${gameId}$history=${his}`;
+    const param= `gameId=${gameId}&history=${his}`;
     return this.http.post(url, param, this.httpOptions);
   }
   //保存游戏记录
@@ -86,8 +87,8 @@ export class GameService {
     let date = new Date();
     let day = this.datePipe.transform(date, 'yyyy-MM-dd');
     let time  = this.datePipe.transform(date, 'HH:mm:ss');
-    const url = `data/user/record`;
-    const param=`gameId=${gameId}&date=${day}&$time=${time}&status=${status}`;
+    const url = `/data/user/record`;
+    const param=`gameId=${gameId}&date=${day}&time=${time}&status=${status}`;
     console.log(day);
     console.log(time);
     return this.http.post(url,param,this.httpOptions);
