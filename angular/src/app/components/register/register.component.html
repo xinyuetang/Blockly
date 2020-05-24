@@ -1,48 +1,59 @@
-<mat-card class="card">
+<div id="register_container" class="container">
+  <div id="register_output" class="container"></div>
+  <div class="wrapper">
+    
+    <mat-card class="card">
 
-    <mat-card-header>
-      <mat-card-title class="title">Register</mat-card-title>
-      <mat-card-subtitle>have an account? 
-        <a routerLink="/login">go to login</a>
-      </mat-card-subtitle>
-    </mat-card-header>
-  
-    <mat-card-content>
-      <form class="form">
-        <!-- (ngSubmit)="onSubmit()" -->
+      <mat-card-header>
+        <mat-card-title class="title">Register</mat-card-title>
+        <mat-card-subtitle>have an account?
+          <a routerLink="/login">go to login</a>
+        </mat-card-subtitle>
+      </mat-card-header>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Enter your userName</mat-label>
-          <input matInput [formControl]="userName">
-          <mat-error *ngIf="userName.invalid">{{getUserNameErrorMessage()}}</mat-error>
-        </mat-form-field>
-        <p></p>
+      <mat-card-content>
+        <form class="form">
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Enter your password</mat-label>
-          <input matInput [formControl]="password" [type]="hide ? 'password' : 'text'">
-          <button mat-icon-button matSuffix (click)="hide = !hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-          <mat-error *ngIf="password.invalid">{{getPasswordErrorMessage()}}</mat-error>
-        </mat-form-field>
-        <p></p>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Enter your userName</mat-label>
+            <input matInput [formControl]="userName">
+            <mat-error *ngIf="userName.invalid">{{getUserNameErrorMessage()}}</mat-error>
+          </mat-form-field>
+          <p></p>
 
-        <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Enter your password</mat-label>
+            <input matInput [formControl]="password" [type]="hide ? 'password' : 'text'" (click)="startConfirmValidator()">
+            <button mat-icon-button matSuffix (click)="hide = !hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="password.invalid">{{getPasswordErrorMessage()}}</mat-error>
+          </mat-form-field>
+          <p></p>
+
+          <mat-form-field appearance="outline" class="full-width">
             <mat-label>Confirm your password</mat-label>
-            <input matInput [formControl]="confirmPassword" [type]="confirmHide ? 'password' : 'text'">
+            <input matInput [formControl]="confirmPassword" [type]="confirmHide ? 'password' : 'text'" (click)="startConfirmValidator()">
             <button mat-icon-button matSuffix (click)="confirmHide = !confirmHide">
               <mat-icon>{{confirmHide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
             <mat-error *ngIf="confirmPassword.invalid">{{getConfirmPasswordErrorMessage()}}</mat-error>
           </mat-form-field>
           <p></p>
-  
-        <button mat-raised-button color="primary" (click)="onClear()">Clear</button>
-        <button mat-raised-button color="primary" [disabled]="userName.invalid||password.invalid||confirmPassword.invalid"
-          (click)="onSubmit()">Register</button>
-  
-      </form>
-    </mat-card-content>
-  </mat-card>
-  
+
+          <button mat-raised-button color="primary" (click)="onClear()">Clear</button>
+          <button mat-raised-button color="primary"
+            [disabled]="userName.invalid||password.invalid||confirmPassword.invalid"
+            (click)="onSubmit()">Register</button>
+
+        </form>
+      </mat-card-content>
+
+      <mat-card-footer>
+        <mat-error *ngIf="!result" class="error">{{getRegisterErrorMessage()}}</mat-error>
+      </mat-card-footer>
+
+    </mat-card>
+
+  </div>
+</div>

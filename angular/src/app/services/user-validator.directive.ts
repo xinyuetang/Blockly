@@ -10,7 +10,7 @@ export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
 
 export function confirmPasswordValidator(passRe: string): ValidatorFn {
   return (control: AbstractControl): {[key: string]: any} | null => {
-    const confirmed = passRe.match(control.value);
-    return confirmed ? {comfirmPassword: {value: control.value}} : null;
+    return passRe === control.value ? null : {comfirmPassword: {value: control.value}};
+    // 返回null值，则不会被捕捉验证错误
   };
 }

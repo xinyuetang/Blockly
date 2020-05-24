@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>新手指南</h2>
+<mat-dialog-content class="mat-typography">
+
+  <mat-horizontal-stepper>
+
+    <mat-step label="选择游戏">
+      <mat-grid-list cols="2" rowHeight="150px">
+        <mat-grid-tile colspan="1" rowspan="2">
+          <img style="width: 400px; margin: 0 5px;" src="../../../assets/start/nav1.jpg">
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <p style="margin: 30px;">我们提供了7个有关计算思维的游戏场景！我们推荐的游玩顺序是由易到难，当然你可以选择你喜欢的游戏先游玩。</p>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <button mat-button mat-raised-button color="primary" (click)="onNoClick()">跳过</button>
+          <button mat-button matStepperNext mat-raised-button color="accent">下一步</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-step>
+
+    <mat-step label="工具栏">
+      <mat-grid-list cols="2" rowHeight="150px">
+        <mat-grid-tile colspan="1" rowspan="2">
+          <img style="width: 400px; margin: 0 5px;" src="../../../assets/start/nav2.jpg">
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <p style="margin: 30px;">这是一个工具栏，我们可以从这里面移出完成右侧的游戏所需要的积木块，进行拼接最后得到我们要的积木。</p>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <button mat-button matStepperPrevious mat-raised-button color="primary">上一步</button>
+          <button mat-button matStepperNext mat-raised-button color="accent">下一步</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-step>
+
+    <mat-step label="拖动积木">
+      <mat-grid-list cols="2" rowHeight="150px">
+        <mat-grid-tile colspan="1" rowspan="2">
+          <img style="width: 400px; margin: 0 5px;" src="../../../assets/start/nav3.jpg">
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <p style="margin: 30px;">当你用工具栏里的积木拼成你满意的组合， 下面你需要做的就是验证你的组合啦！我们建议每个游戏场景通过之后再进行下一个，但是我们仍然允许你先看一看后面的场景， 你可以在右边的游戏界面看到你的积木组合的运行过程，方便帮助你找出问题。</p>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <button mat-button matStepperPrevious mat-raised-button color="primary">上一步</button>
+          <button mat-button matStepperNext mat-raised-button color="accent">下一步</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-step>
+
+    <mat-step label="Done">
+      <p>恭喜你完成了简易教程，赶紧体验一下吧！</p>
+      <button mat-button mat-raised-button color="accent" (click)="onNoClick()">完成</button>
+    </mat-step>
+  </mat-horizontal-stepper>
+</mat-dialog-content>

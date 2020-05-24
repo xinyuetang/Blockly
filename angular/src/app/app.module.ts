@@ -1,9 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
-import {HttpClientJsonpModule} from '@angular/common/http';
-import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
-import {InMemoryDataService} from './services/in-memory-data.service';
+import {HttpClientModule, HttpClientJsonpModule} from '@angular/common/http';
+// import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
+// import {InMemoryDataService} from './services/in-memory-data.service';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -19,7 +18,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
-import {MatDialogModule,MAT_DIALOG_DEFAULT_OPTIONS} from'@angular/material/dialog'
+import {MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
+import {MatListModule} from '@angular/material/list';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 import { AppComponent } from './app.component';
@@ -34,6 +35,8 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { VedioRoomComponent } from './components/vedio-room/vedio-room.component';
 import { AnimationComponent } from './components/animation/animation.component';
+import { StartStepComponent } from './components/start-step/start-step.component';
+
 
 
 
@@ -53,14 +56,15 @@ import { AnimationComponent } from './components/animation/animation.component';
     UserInfoComponent,
     VedioRoomComponent,
     AnimationComponent,
+    StartStepComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientJsonpModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    ),
+    HttpClientJsonpModule,
+    // HttpClientInMemoryWebApiModule.forRoot(
+    //   InMemoryDataService, { dataEncapsulation: false }
+    // ),
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
@@ -75,10 +79,13 @@ import { AnimationComponent } from './components/animation/animation.component';
     MatTabsModule,
     MatTableModule,
     MatSortModule,
-    MatDialogModule
+    MatDialogModule,
+    MatListModule,
+    MatStepperModule
   ],
   entryComponents: [
-    DialogComponent  
+    DialogComponent,
+    StartStepComponent
   ],
   providers: [{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
   bootstrap: [AppComponent],

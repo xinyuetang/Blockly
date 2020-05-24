@@ -4,4 +4,4 @@ CREATE TABLE `history`(
   `history` LONGTEXT,
   FOREIGN KEY (userId) REFERENCES user(id),
   PRIMARY KEY (userId,gameId)
-)
+);

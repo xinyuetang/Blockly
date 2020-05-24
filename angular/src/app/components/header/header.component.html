@@ -1,27 +1,36 @@
 <mat-toolbar color="primary">
-  Happy Coding
+
+  <h1>Happy Coding</h1>
+
   <span class="links">
 
-    <mat-icon>home</mat-icon>
-    <a routerLink="/home">Home</a>
+    <a routerLink="/home">
+      <mat-icon class="icon">home</mat-icon>Home
+    </a>
 
-    <mat-icon>games</mat-icon>
-    <a routerLink="/list-of-games">Games</a>
+    <a routerLink="/list-of-games">
+      <mat-icon class="icon">games</mat-icon>Games
+    </a>
 
-    <mat-icon>start</mat-icon>
-    <a routerLink="/quick-start">Quick Start</a>
+    <a routerLink="/quick-start">
+      <mat-icon class="icon">start</mat-icon>Quick Start
+    </a>
 
-    <mat-icon>person</mat-icon>
-    <a routerLink="/user-info">Personal</a>
+    <a routerLink="/user-info" *ngIf="isLogin">
+      <mat-icon class="icon">person</mat-icon>Personal
+    </a>
 
-    <mat-icon></mat-icon>
-    <a routerLink="/login">Login</a>
+    <a routerLink="/login" *ngIf="!isLogin">
+      <mat-icon class="icon"></mat-icon>Login
+    </a>
 
-    <mat-icon></mat-icon>
-    <a routerLink="/register">Register</a>
+    <a routerLink="/register" *ngIf="!isLogin">
+      <mat-icon class="icon"></mat-icon>Register
+    </a>
 
-    <mat-icon>logout</mat-icon>
-    <a routerLinck="/home">Logout</a>
+    <a (click)="logout()" *ngIf="isLogin">
+      <mat-icon class="icon">logout</mat-icon>Logout
+    </a>
   </span>
 
 </mat-toolbar>

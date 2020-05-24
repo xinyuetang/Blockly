@@ -11,7 +11,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^9.1.2",
+    "@angular/animations": "^9.1.4",
     "@angular/cdk": "^9.2.1",
     "@angular/common": "~9.1.0",
     "@angular/compiler": "~9.1.0",
@@ -24,6 +24,7 @@
     "angular-in-memory-web-api": "^0.8.0",
     "blockly": "^3.20200402.1",
     "rxjs": "~6.5.4",
+    "save": "^2.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

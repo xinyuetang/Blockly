@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
-import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import {ErrorStateMatcher} from '@angular/material/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MatIconRegistry} from '@angular/material/icon';
+import { UserSharedService } from 'src/app/services/userShared.service';
+import { Router, NavigationEnd } from '@angular/router';
+declare var homeShow: (container, output) => any;
 
 @Component({
   selector: 'app-login',
@@ -13,24 +12,53 @@ import {MatIconRegistry} from '@angular/material/icon';
 })
 export class LoginComponent implements OnInit {
 
-
+  // 路由
+  navigationSubscription: any;
+  // 用户名必填
   userName = new FormControl('', [
     Validators.required,
   ]);
-
+  // 密码必填，且大于等于6位
   password = new FormControl('', [
     Validators.required,
     Validators.minLength(6),
   ]);
-
+  // 密码隐藏处理
   hide = true;
+  // 登录结果获取
+  result: boolean;
+  message: string;
+  userId: number;
 
-  loginResult: boolean;
-  userID: number;
+  constructor(
+    private userService: UserService,
+    private userSharedService: UserSharedService,
+    private router: Router) {
+    // 监听路由切换
+    this.navigationSubscription = this.router.events.subscribe((event: any) => {
+      if (event instanceof NavigationEnd) {
+        this.render();
+      }
+    });
+  }
 
-  constructor(private userService: UserService, private router: Router) { }
+  ngOnInit(): void {
+    this.render();
+  }
 
-  ngOnInit(): void {}
+  // tslint:disable-next-line: use-lifecycle-interface
+  ngOnDestroy() {
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+  }
+
+  // 背景渲染
+  render() {
+    const container = document.getElementById('login_container');
+    const output = document.getElementById('login_output');
+    homeShow(container, output);
+  }
 
   onClear() {
     this.userName.patchValue('');
@@ -45,33 +73,46 @@ export class LoginComponent implements OnInit {
 
   login(name: string, password: string): void {
     this.userService.login(name, password).subscribe((data) => {
-      const user = data[0];
-      if (user != null) {
-        this.loginResult = true;
-        this.userID = user.id;
-        console.log('login successfully');
-        console.log(user);
-        this.router.navigate(['/']);
-      } else {
-        this.loginResult = false;
-        console.log('fail to login');
+      // console.log(data);
+      if (data != null && data.result === true){
+        this.result = data.result;
+        this.message = data.message;
+        this.userId = data.userId;
+        this.router.navigate(['/home']);
+        this.checkLogin();
+      }else{
+        this.result = data.result;
+        this.message = data.message;
       }
     });
   }
 
+  // 使导航栏获取login情况
+  checkLogin(){
+    this.userSharedService.isLogin.next(true);
+  }
+
+  // 客户端输入验证-用户名
   getUserNameErrorMessage() {
     if (this.userName.hasError('required')) {
       return 'Please enter a valid userName';
     }
     return '';
   }
-
+  // 客户端输入验证-密码
   getPasswordErrorMessage() {
     if (this.password.hasError('required')) {
       return 'Please enter a valid password';
     }
     if (this.password.hasError('minlength')) {
       return 'The password should be at least 6';
+    }
+    return '';
+  }
+  // 服务端登录返回验证
+  getLoginErrorMessage() {
+    if (this.result === false){
+      return '登录失败，' + this.message;
     }
     return '';
   }
