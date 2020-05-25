@@ -7,6 +7,15 @@ public class UserEntity {
     private String pwd;
     private String email;
     private String avatar;
+    private String date;  //注册日期
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String getEmail() {
         return email;

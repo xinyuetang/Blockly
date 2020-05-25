@@ -4,6 +4,15 @@ public class InformationMessage extends Message {
     private String userName;
     private String avatar;
     private String email;
+    private String date;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String getUserName() {
         return userName;

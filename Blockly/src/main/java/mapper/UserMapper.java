@@ -17,7 +17,7 @@ public interface UserMapper {
     @Select("select * from user where id = #{id}")
     public UserEntity selectUserById(int id);
 
-    @Insert("insert into user(name,pwd,email,avatar) values (#{name},#{pwd},#{email},#{avatar})")
+    @Insert("insert into user(name,pwd,email,avatar,date) values (#{name},#{pwd},#{email},#{avatar},#{date})")
     public int insertUser(UserEntity user);
 
     @Insert("insert into record(userId,gameId,date,time,status) values (#{userId},#{gameId},#{date},#{time},#{status})")
