@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { UserSharedService } from 'src/app/services/userShared.service';
+import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,9 +22,10 @@ export class HeaderComponent implements OnInit {
   constructor(
     private userService: UserService,
     private userSharedService: UserSharedService,
-    private router: Router) {}
+    private router: Router,
+    private cookieService: CookieService) {}
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.userSharedService.isLogin.subscribe(data => {
       this.isLogin = data;
       console.log(this.isLogin);
@@ -36,19 +38,16 @@ export class HeaderComponent implements OnInit {
       if (data != null && data.result === true){
         this.result = data.result;
         this.message = data.message;
-        this.checkLogout();
+        this.userSharedService.isLogin.next(false);
         this.router.navigate(['/home']);
+        this.cookieService.set('loginName', '');
+        this.cookieService.set('loginPass', '');
       }else{
         this.result = data.result;
         this.message = data.message;
         // alert(this.message);
       }
     });
-  }
-
-  // 使导航栏获取logout情况
-  checkLogout(){
-    this.userSharedService.isLogin.next(false);
   }
 
 }

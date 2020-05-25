@@ -7,7 +7,7 @@ import { UserSharedService } from 'src/app/services/userShared.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router,private userSharedService:UserSharedService ) {
+  constructor(private router: Router, private userSharedService: UserSharedService ) {
 
   }
 
@@ -17,14 +17,14 @@ export class AuthGuard implements CanActivate {
       return this.checkLogin();
   }
   checkLogin(): boolean{
-    let islogin=false;
+    let islogin = false;
     this.userSharedService.isLogin.subscribe(data => {
       islogin = data;
     });
-    if(!islogin){
+    if (!islogin){
       this.router.navigate(['login']);
     }
-    return islogin; 
+    return islogin;
   }
-  
+
 }
