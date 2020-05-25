@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/models/user';
-import { Record } from 'src/app/models/record';
-import { Observable } from 'rxjs';
+import {GameService} from 'src/app/services/game.service'
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -14,15 +12,15 @@ export class UserInfoComponent implements OnInit {
 
   // 获取用户信息结果
   userName: string;
-  avatar: string;
+  date: string;//注册日期
   email: string;
   // 获取用户操作记录结果
   records: [];
   // 用户操作记录展示
-  displayedColumns: string[] = ['gameId', 'date', 'time', 'status'];
+  displayedColumns: string[] = ['game', 'date', 'time', 'status'];
   dataSource: MatTableDataSource<any>;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService,public gameService:GameService) {}
 
   ngOnInit(): void {
     this.getInformation();
@@ -34,7 +32,7 @@ export class UserInfoComponent implements OnInit {
       console.log(data);
       if (data != null && data.result === true) {
         this.userName = data.userName;
-        this.avatar = data.avatar;
+        this.date = data.date;
         this.email = data.email;
       } else {
         alert('用户信息获取失败，' + data.message);

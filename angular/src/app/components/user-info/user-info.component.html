@@ -2,8 +2,8 @@
 
   <mat-tab label="个人信息">
     <p>昵称：{{userName}}</p>
-    <p>头像：{{avatar}}</p>
     <p>邮箱：{{email}}</p>
+    <p>注册时间：{{date}}</p>
   </mat-tab>
   
   <mat-tab label="操作记录">
@@ -15,10 +15,10 @@
     
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     
-      <ng-container matColumnDef="gameId">
-        <th mat-header-cell *matHeaderCellDef> 游戏ID </th>
+      <ng-container matColumnDef="game">
+        <th mat-header-cell *matHeaderCellDef> 游戏名称 </th>
         <td mat-cell *matCellDef="let record">
-          <a routerLink="/game/{{record.gameId}}"> {{record.gameId}} </a>
+          <a routerLink="/game/{{record.gameId}}"> {{gameService.getGame(record.gameId).name}} </a>
         </td>
       </ng-container>
 

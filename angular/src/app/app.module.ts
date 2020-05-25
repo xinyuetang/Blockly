@@ -6,7 +6,7 @@ import {HttpClientModule, HttpClientJsonpModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
+import { CookieService } from 'ngx-cookie-service';
 
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
@@ -21,7 +21,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
 import {MatListModule} from '@angular/material/list';
 import {MatStepperModule} from '@angular/material/stepper';
-
+import {DatePipe} from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -36,6 +36,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { VedioRoomComponent } from './components/vedio-room/vedio-room.component';
 import { AnimationComponent } from './components/animation/animation.component';
 import { StartStepComponent } from './components/start-step/start-step.component';
+import { from } from 'rxjs';
 
 
 
@@ -87,7 +88,11 @@ import { StartStepComponent } from './components/start-step/start-step.component
     DialogComponent,
     StartStepComponent
   ],
-  providers: [{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    DatePipe,
+    CookieService
+  ],
   bootstrap: [AppComponent],
   exports: [BlocklyComponent],
 })

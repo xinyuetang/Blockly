@@ -1,0 +1,17 @@
+.title {
+    font-weight: bold;
+    text-align: center;
+    color: #484848;
+}
+.emphasize {
+    border:1px solid gainsboro;
+    color: #FF3399;  
+    background-color: #F8F8F8;  
+    border-radius: 5px;
+}
+.video{
+    height: 100px;
+    margin: 10px;
+    background-color: beige;
+
+}

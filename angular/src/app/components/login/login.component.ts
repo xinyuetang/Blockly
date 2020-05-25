@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { UserSharedService } from 'src/app/services/userShared.service';
+import { CookieService } from 'ngx-cookie-service';
 import { Router, NavigationEnd } from '@angular/router';
 declare var homeShow: (container, output) => any;
 
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private userService: UserService,
     private userSharedService: UserSharedService,
-    private router: Router) {
+    private router: Router,
+    private cookieService: CookieService) {
     // 监听路由切换
     this.navigationSubscription = this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
@@ -71,8 +73,8 @@ export class LoginComponent implements OnInit {
     this.login(name, password);
   }
 
-  login(name: string, password: string): void {
-    this.userService.login(name, password).subscribe((data) => {
+  login(name: string, pass: string): void {
+    this.userService.login(name, pass).subscribe((data) => {
       // console.log(data);
       if (data != null && data.result === true){
         this.result = data.result;
@@ -80,6 +82,8 @@ export class LoginComponent implements OnInit {
         this.userId = data.userId;
         this.router.navigate(['/home']);
         this.checkLogin();
+        this.cookieService.set('loginName', name);
+        this.cookieService.set('loginPass', pass);
       }else{
         this.result = data.result;
         this.message = data.message;
