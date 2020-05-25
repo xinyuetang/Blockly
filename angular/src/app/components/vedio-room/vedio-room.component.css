@@ -15,3 +15,31 @@
     background-color: beige;
 
 }
+#help {
+    margin: 0;
+    position: fixed;
+    left: 78%;
+    top: 11%;
+    width: 21%;
+    height: 40%;
+    overflow: scroll;
+}
+#remoteVideo{
+    margin: 0;
+    position: fixed;
+    left: 78%;
+    top: 53%;
+    width: 21%;
+    height: 22%;
+    background-color:beige;
+}
+
+#localVideo{
+    margin: 0;
+    position: fixed;
+    left: 78%;
+    top: 77%;
+    width: 21%;
+    height: 23%;
+    background-color:beige;
+}

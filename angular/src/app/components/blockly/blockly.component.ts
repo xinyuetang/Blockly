@@ -23,7 +23,16 @@ declare var Blockly: any;
 
 
 export class BlocklyComponent implements OnInit, OnDestroy {
+  gameId: number;
+  game: IGame;
+  workspace: any;
+  gameList: IGame[];
+  private someHtmlCode = '';
+  navigationSubscription: any;
 
+
+  @ViewChild('animation')
+  animation: AnimationComponent;
 
   constructor(
     private router: Router,
@@ -39,16 +48,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     });
 
   };
-  gameId: number;
-  game: IGame;
-  workspace: any;
-  gameList: IGame[];
-  private someHtmlCode = '';
-  navigationSubscription: any;
 
-
-  @ViewChild('animation')
-  animation: AnimationComponent;
 
   refresh() {
     this.getGame();
@@ -94,32 +94,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
         this.workspace
       );
     }
-
-
-    /*resizable */
-    // const blocklyArea = document.getElementById('blocklyArea');
-    // const blocklyDiv = document.getElementById('blocklyDiv');
-    // var onresize = function() {
-    //   // Compute the absolute coordinates and dimensions of blocklyArea.
-    //   var element :HTMLElement=blocklyArea;
-    //   var x = 0;
-    //   var y = 0;
-    //   // do {
-    //     x += element.offsetLeft;
-    //     y += element.offsetTop;
-    //     // element =  element.offsetParent;
-    //   // } while (element!=null);
-    //   // Position blocklyDiv over blocklyArea.
-    //   blocklyDiv.style.left = x + 'px';
-    //   blocklyDiv.style.top = y + 'px';
-    //   blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-    //   blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-    //   Blockly.svgResize(this.workspace);
-    // };
-    //  window.addEventListener('resize', onresize, false);
   }
-
-
 
   getGame(): void {
     this.gameId = +this.route.snapshot.paramMap.get('id');
@@ -151,10 +126,10 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     this.game.xmlData = Blockly.Xml.domToText(
       Blockly.Xml.workspaceToDom(this.workspace)
     );
-    this.gameService.saveHistory(this.gameId, this.game.xmlData).subscribe((data)=>{
-      if(data!=null) console.log('saving the program - ', JSON.stringify(this.game.name));
+    this.gameService.saveHistory(this.gameId, this.game.xmlData).subscribe((data) => {
+      if (data != null) console.log('saving the program - ', JSON.stringify(this.game.name));
     });
-    
+
 
   }
   last() {

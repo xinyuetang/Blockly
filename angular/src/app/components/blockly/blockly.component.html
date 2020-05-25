@@ -1,38 +1,23 @@
-<mat-grid-list cols="12" rows="7" rowHeight="90px" id="game-panel">
+<!-- <div id="blocklyArea"> -->
+    <div id="blocklyDiv"></div>
+<!-- </div> -->
 
-    <mat-grid-tile colspan="5" rowspan="7" id="blocklyArea">
-        <div id="blocklyDiv"></div>
-    </mat-grid-tile>
+<div id="game_info">
+    <p class="title">
+        {{game.name}}
+    <p>
+    <p [innerHTML]="game.description"> </p>
+    <p class="hint">
+        {{game.hint}}
+    </p>
+    <div id="action">
+        <button mat-raised-button color="primary" (click)="clear()">重置</button>
+        <button mat-raised-button color="primary" (click)="save()">保存</button>
+        <button mat-raised-button color="primary" (click)="run()">运行</button>
+        <button mat-stroked-button (click)="last()" [disabled]="gameId==0? true : false">上一关</button>
+        <button mat-stroked-button (click)="next()" [disabled]="gameId==1? true : false">下一关</button>
+    </div>
+</div>
+<app-vedio-room id="vedioroom"></app-vedio-room>
 
-    <mat-grid-tile colspan="4" rowspan="3" style="overflow: scroll;">
-        <div id="game_info">
-            <p class="title">
-                {{game.name}}
-            <p>
-            <p [innerHTML]="game.description"> </p>
-            <p class="hint">
-                {{game.hint}}
-            </p> 
-            <div id="action">
-                <button mat-raised-button color="primary" (click)="clear()">重置</button>
-                <button mat-raised-button color="primary" (click)="save()">保存</button>
-                <button mat-raised-button color="primary" (click)="run()">运行</button>
-                <button mat-stroked-button (click)="last()"  [disabled]="gameId==0? true : false">上一关</button>
-                <button mat-stroked-button (click)="next()"  [disabled]="gameId==1? true : false">下一关</button>
-            </div>
-        </div> 
-        
-        
-    </mat-grid-tile>
-    
-    <mat-grid-tile colspan="3" rowspan="7">
-        <app-vedio-room id="vedio-room">vedio room</app-vedio-room>
-    </mat-grid-tile>
-
-
-    <mat-grid-tile colspan="4" rowspan="4">
-        <app-animation #animation [gameID]='gameId'></app-animation>
-    </mat-grid-tile>
-
-
-</mat-grid-list>
+<app-animation id="animation" #animation [gameID]='gameId'></app-animation>
