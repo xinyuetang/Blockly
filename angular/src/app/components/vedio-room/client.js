@@ -1,5 +1,6 @@
 // const socket = io.connect('http://localhost:3000');
 // const socket = io.connect('http://ec2-3-86-88-216.compute-1.amazonaws.com:8080');
+import io from './socket.io.js';
 const socket = io.connect('http://49.235.35.92:8759');
 
 const CLIENT_RTC_EVENT = 'CLIENT_RTC_EVENT';
@@ -37,13 +38,13 @@ socket.on('error', function (errorMessage) {
 
 socket.on(SERVER_USER_EVENT, function (msg) {
     const type = msg.type;
-    const payload = msg.payload;
-
-    switch (type) {
-        case SERVER_USER_EVENT_UPDATE_USERS:
-            updateUserList(payload);
-            break;
-    }
+    // const payload = msg.payload;
+    //
+    // switch (type) {
+    //     case SERVER_USER_EVENT_UPDATE_USERS:
+    //         updateUserList(payload);
+    //         break;
+    // }
     log(`[${SERVER_USER_EVENT}] [${type}], ${JSON.stringify(msg)}`);
 });
 
@@ -219,17 +220,18 @@ function onsignalingstatechange(evt) {
 // 这个行为有点奇怪，github issue 也有提到 https://github.com/meetecho/janus-gateway/issues/1313
 let stream;
 function ontrack(evt) {
-    // if (!stream) {
-    //     stream = evt.streams[0];
-    // } else {
-    //     console.log(`${stream === evt.streams[0]}`); // 这里为true
-    // }
+    if (!stream) {
+        stream = evt.streams[0];
+    } else {
+        console.log(`${stream === evt.streams[0]}`); // 这里为true
+    }
     log(`ontrack.`);
     const remoteVideo = document.getElementById('remote-video');
     remoteVideo.srcObject = evt.streams[0];
 }
 
 // 点击用户列表
+/*
 async function handleUserClick(evt) {
     const target = evt.target;
     const userName = target.getAttribute('data-name').trim();
@@ -247,11 +249,20 @@ async function handleUserClick(evt) {
     hideButtonBar();
     hideUsersUl();
 }
+*/
+
+// 进入房间
+export async function linkRemoteRoom(remoteId) {
+  remoteUser = remoteId;
+  await startVideoTalk(remoteUser);
+}
+
 
 /**
  * 更新用户列表
  * @param {Array} users 用户列表，比如 [{name: '小明', name: '小强'}]
  */
+/*
 function updateUserList(users) {
     const fragment = document.createDocumentFragment();
     const userList = document.getElementById('login-users');
@@ -274,12 +285,13 @@ function updateUserList(users) {
 
     userList.appendChild(fragment);
 }
+*/
 
 /**
  * 用户登录
  * @param {String} loginName 用户名
  */
-function login(loginName) {
+export function login(loginName) {
     localUser = loginName;
     sendUserEvent({
         type: CLIENT_USER_EVENT_LOGIN,
@@ -288,6 +300,7 @@ function login(loginName) {
         }
     });
 }
+
 
 // // 处理登录
 // function handleLogin(evt) {

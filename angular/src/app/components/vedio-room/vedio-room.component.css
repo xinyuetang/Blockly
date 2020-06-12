@@ -1,76 +1,48 @@
-.video-room{
-  width: inherit;
-  height: inherit;
-  text-align: center;
+.title {
+    font-weight: bold;
+    text-align: center;
+    color: #484848;
+}
+.emphasize {
+    border:1px solid gainsboro;
+    color: #FF3399;
+    background-color: #F8F8F8;
+    border-radius: 5px;
+}
+.video{
+    margin: auto;
+    height: 100px;
+    /*margin: 10px;*/
+    background-color: beige;
+    clear:both;
+    display:block;
+
+}
+#help {
+    margin: 0;
+    position: fixed;
+    left: 78%;
+    top: 11%;
+    width: 21%;
+    height: 100%;
+    overflow: scroll;
+}
+#remote-Video{
+    /*margin: 0;*/
+    position: fixed;
+    left: 78%;
+    top: 53%;
+    width: 21%;
+    height: 22%;
+    background-color:beige;
 }
 
-.video-window{
-  clear:both;
-  display:block;
-  margin:auto;
-  background-color: gray;
-  min-height: 60px;
-  position: relative;
-  transform: rotateY(180deg);
-  flex: 1;
+#local-Video{
+    /*margin: 0;*/
+    position: fixed;
+    left: 78%;
+    top: 77%;
+    width: 21%;
+    height: 23%;
+    background-color:beige;
 }
-
-.video-button{
-  color: white;
-  background-color: #3f51b5;
-  box-shadow: 2px -2px 2px #888888;
-  border: none;
-  min-width: 64px;
-  line-height: 36px;
-  padding: 0 16px;
-  border-radius: 4px;
-  transform: translate3d(0, 0, 0);
-  font-size: 14px;
-  margin: 1%!important;
-}
-
-.room-number-container{
-  line-height: 36px;
-  margin: 1%!important;
-  display: flex;
-  background-color: #3f51b5;
-}
-
-.users-container{
-  background-color: #3f51b5;
-  display: flex;
-  margin: 1%!important;
-}
-
-#room-number{
-  clear:both;
-  margin:auto;
-  font-size: 20px;
-  padding: 0 16px;
-  min-height: 26px;
-  display: none;
-  color: white;
-}
-
-#button-bar{
-  display: inline;
-}
-
-#local-video{
-  display: none;
-}
-
-#login-users{
-  clear:both;
-  margin:auto;
-  display: none;
-  color: white;
-}
-
-
-
-
-
-
-
-
