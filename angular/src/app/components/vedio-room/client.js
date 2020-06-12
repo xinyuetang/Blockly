@@ -1,7 +1,7 @@
 // const socket = io.connect('http://localhost:3000');
 // const socket = io.connect('http://ec2-3-86-88-216.compute-1.amazonaws.com:8080');
 import io from './socket.io.js';
-const socket = io.connect('http://49.235.35.92:8759');
+export const socket = io.connect('http://49.235.35.92:8759');
 
 const CLIENT_RTC_EVENT = 'CLIENT_RTC_EVENT';
 const SERVER_RTC_EVENT = 'SERVER_RTC_EVENT';
@@ -17,7 +17,7 @@ const SIGNALING_OFFER = 'SIGNALING_OFFER';
 const SIGNALING_ANSWER = 'SIGNALING_ANSWER';
 const SIGNALING_CANDIDATE = 'SIGNALING_CANDIDATE';
 
-let remoteUser = ''; // 远端用户
+export let remoteUser = ''; // 远端用户
 let localUser = ''; // 本地登录用户
 
 function log(msg) {
@@ -36,8 +36,8 @@ socket.on('error', function (errorMessage) {
     log('ws error, ' + errorMessage);
 });
 
-socket.on(SERVER_USER_EVENT, function (msg) {
-    const type = msg.type;
+// socket.on(SERVER_USER_EVENT, function (msg) {
+//     const type = msg.type;
     // const payload = msg.payload;
     //
     // switch (type) {
@@ -45,8 +45,8 @@ socket.on(SERVER_USER_EVENT, function (msg) {
     //         updateUserList(payload);
     //         break;
     // }
-    log(`[${SERVER_USER_EVENT}] [${type}], ${JSON.stringify(msg)}`);
-});
+//     log(`[${SERVER_USER_EVENT}] [${type}], ${JSON.stringify(msg)}`);
+// });
 
 socket.on(SERVER_RTC_EVENT, function (msg) {
     const { type } = msg;

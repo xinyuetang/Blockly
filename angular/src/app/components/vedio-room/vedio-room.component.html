@@ -4,11 +4,10 @@
             class='emphasize'>输入该房间号</span>，即可开始视频。</p>
     <mat-card-content>
         <button (click)="createRoom()">开房间</button>
-        <p [formControl]="roomId">房间号：{{roomId}}</p>
+        <span [formControl]="roomId">房间号：{{roomId.value}}</span>
         <br />
         <button>进房间</button>
         <form class="form">
-
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>房间号：</mat-label>
                 <input matInput [formControl]="roomId">
@@ -16,7 +15,7 @@
             </mat-form-field>
             <button (click)="connectRemoteRoom()">开始视频</button>
             <button>结束视频</button>
-            <button>对方操作</button>
+            <!-- <button>对方操作</button> -->
         </form>
     </mat-card-content>
     <!-- 对方的视频框-->

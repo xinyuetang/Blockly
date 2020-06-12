@@ -4,6 +4,9 @@ import { IGame } from 'src/app/models/game';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnimationComponent } from '../animation/animation.component';
+import {socket,remoteUser} from '../vedio-room/client.js';
+
+
 // import * as Blockly from 'blockly';
 declare var Blockly: any;
 
@@ -20,7 +23,6 @@ declare var Blockly: any;
   template: '<p class="emphasize" [innerHTML]="someHtmlCode"></p>',
   encapsulation: ViewEncapsulation.None,
 })
-
 
 export class BlocklyComponent implements OnInit, OnDestroy {
   gameId: number;
@@ -87,14 +89,45 @@ export class BlocklyComponent implements OnInit, OnDestroy {
       maxBlocks: 20,
       toolbox: this.game.toobox
     });
+  
     //若有历史记录
     if (this.game.xmlData) {
       Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(this.game.xmlData),
         this.workspace
       );
-    }
+    };
+   
+    this.workspace.addChangeListener(this.onOperate);
+  
+    socket.on('SERVER_USER_EVENT', function (msg) {
+      const type = msg.type;
+      console.log(type);
+      if(type== 'OPERATING'){
+        console.log("---blocky receive change---");
+        var content = msg.payload.content;
+        Blockly.Xml.domToWorkspace(
+          Blockly.Xml.textToDom(content),
+          this.workspace
+        );
+      }
+  });
   }
+  
+  onOperate(event) :void{
+    var workspace  = Blockly.Workspace.getById(event.workspaceId)
+    var tmp = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+      var msg = {
+        type: 'OPERATING',
+        payload: {
+            content: tmp,
+            target: remoteUser
+        }};
+      socket.emit('CLIENT_USER_EVENT', JSON.stringify(msg));     
+      console.log("--- blockly change listener---"); 
+
+  }
+  
 
   getGame(): void {
     this.gameId = +this.route.snapshot.paramMap.get('id');
@@ -145,6 +178,8 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     });
 
   }
+  
+
 }
 
 
