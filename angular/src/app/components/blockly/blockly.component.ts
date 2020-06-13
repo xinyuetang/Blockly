@@ -89,7 +89,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
       maxBlocks: 20,
       toolbox: this.game.toobox
     });
-  
+
     //若有历史记录
     if (this.game.xmlData) {
       Blockly.Xml.domToWorkspace(
@@ -97,14 +97,17 @@ export class BlocklyComponent implements OnInit, OnDestroy {
         this.workspace
       );
     };
-   
+
     this.workspace.addChangeListener(this.onOperate);
-  
+
     socket.on('SERVER_USER_EVENT', function (msg) {
       const type = msg.type;
       console.log(type);
       if(type== 'OPERATING'){
         console.log("---blocky receive change---");
+
+        console.log(msg);//to display msg
+
         var content = msg.payload.content;
         Blockly.Xml.domToWorkspace(
           Blockly.Xml.textToDom(content),
@@ -113,7 +116,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
       }
   });
   }
-  
+
   onOperate(event) :void{
     var workspace  = Blockly.Workspace.getById(event.workspaceId)
     var tmp = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
@@ -123,11 +126,11 @@ export class BlocklyComponent implements OnInit, OnDestroy {
             content: tmp,
             target: remoteUser
         }};
-      socket.emit('CLIENT_USER_EVENT', JSON.stringify(msg));     
-      console.log("--- blockly change listener---"); 
+      socket.emit('CLIENT_USER_EVENT', JSON.stringify(msg));
+      console.log("--- blockly change listener---");
 
   }
-  
+
 
   getGame(): void {
     this.gameId = +this.route.snapshot.paramMap.get('id');
@@ -178,7 +181,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     });
 
   }
-  
+
 
 }
 
