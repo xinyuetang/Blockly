@@ -60,7 +60,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     }
 
     //若有历史记录
-    if (this.game.xmlData) {
+    if (this.game.xmlData && this.workspace!=null) {
       Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(this.game.xmlData),
         this.workspace
@@ -99,27 +99,30 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     };
 
     this.workspace.addChangeListener(this.onOperate);
-
+    let workSpace = this.workspace;
+    let onOperate = this.onOperate;
     socket.on('SERVER_USER_EVENT', function (msg) {
-      const type = msg.type;
-      console.log(type);
-      if(type== 'OPERATING'){
-        console.log("---blocky receive change---");
-
-        console.log(msg);//to display msg
-
-        var content = msg.payload.content;
+      
+      if(msg.type== 'OPERATING'){
+        console.log("--- blockly receive change ---");
+        console.log(msg.payload.content);
+        workSpace.clear();
         Blockly.Xml.domToWorkspace(
-          Blockly.Xml.textToDom(content),
-          this.workspace
+          Blockly.Xml.textToDom(msg.payload.content),  
+          workSpace
         );
+        workSpace.removeChangeListener(onOperate);
       }
+
   });
   }
 
   onOperate(event) :void{
-    var workspace  = Blockly.Workspace.getById(event.workspaceId)
-    var tmp = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    if(event.type==Blockly.Events.BLOCK_MOVE&&remoteUser!=''){
+      
+    let workspace  = Blockly.Workspace.getById(event.workspaceId);
+    let tmp = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    
       var msg = {
         type: 'OPERATING',
         payload: {
@@ -127,7 +130,10 @@ export class BlocklyComponent implements OnInit, OnDestroy {
             target: remoteUser
         }};
       socket.emit('CLIENT_USER_EVENT', JSON.stringify(msg));
-      console.log("--- blockly change listener---");
+      console.log("--- blockly send change ---");
+      console.log(tmp);
+      workspace.removeChangeListener(this);
+    }
 
   }
 
@@ -159,11 +165,15 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     this.animation.clear();
   }
   save(): void {
+    //console.log(this.workspace);
     this.game.xmlData = Blockly.Xml.domToText(
       Blockly.Xml.workspaceToDom(this.workspace)
     );
     this.gameService.saveHistory(this.gameId, this.game.xmlData).subscribe((data) => {
-      if (data != null) console.log('saving the program - ', JSON.stringify(this.game.name));
+      if (data != null){ 
+        console.log('saving the program - ', JSON.stringify(this.game.name));
+        //console.log(this.game.xmlData)
+  }
     });
 
 
