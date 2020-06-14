@@ -10,6 +10,7 @@ const CLIENT_USER_EVENT = 'CLIENT_USER_EVENT';
 const SERVER_USER_EVENT = 'SERVER_USER_EVENT';
 
 const CLIENT_USER_EVENT_LOGIN = 'CLIENT_USER_EVENT_LOGIN'; // 登录
+const CLIENT_USER_EVENT_FINISH = 'CLIENT_USER_EVENT_FINISH';
 
 const SERVER_USER_EVENT_UPDATE_USERS = 'SERVER_USER_EVENT_UPDATE_USERS';
 
@@ -18,7 +19,7 @@ const SIGNALING_ANSWER = 'SIGNALING_ANSWER';
 const SIGNALING_CANDIDATE = 'SIGNALING_CANDIDATE';
 
 export let remoteUser = ''; // 远端用户
-let localUser = ''; // 本地登录用户
+export let localUser = ''; // 本地登录用户
 
 function log(msg) {
     console.log(`[client] ${msg}`);
@@ -36,17 +37,6 @@ socket.on('error', function (errorMessage) {
     log('ws error, ' + errorMessage);
 });
 
-// socket.on(SERVER_USER_EVENT, function (msg) {
-//     const type = msg.type;
-    // const payload = msg.payload;
-    //
-    // switch (type) {
-    //     case SERVER_USER_EVENT_UPDATE_USERS:
-    //         updateUserList(payload);
-    //         break;
-    // }
-//     log(`[${SERVER_USER_EVENT}] [${type}], ${JSON.stringify(msg)}`);
-// });
 
 socket.on(SERVER_RTC_EVENT, function (msg) {
     const { type } = msg;
@@ -63,6 +53,8 @@ socket.on(SERVER_RTC_EVENT, function (msg) {
             break;
     }
 });
+
+
 
 async function handleReceiveOffer(msg) {
     log(`receive remote description from ${msg.payload.from}`);
@@ -230,62 +222,12 @@ function ontrack(evt) {
     remoteVideo.srcObject = evt.streams[0];
 }
 
-// 点击用户列表
-/*
-async function handleUserClick(evt) {
-    const target = evt.target;
-    const userName = target.getAttribute('data-name').trim();
-
-    // if (userName === localUser) {
-    //     alert('不能跟自己进行视频会话');
-    //     return;
-    // }
-
-    alert(`Connecting To:\n ${userName}`);
-
-    remoteUser = userName;
-    await startVideoTalk(remoteUser);
-    displayRoomId(userName);
-    hideButtonBar();
-    hideUsersUl();
-}
-*/
-
 // 进入房间
 export async function linkRemoteRoom(remoteId) {
   remoteUser = remoteId;
   await startVideoTalk(remoteUser);
 }
 
-
-/**
- * 更新用户列表
- * @param {Array} users 用户列表，比如 [{name: '小明', name: '小强'}]
- */
-/*
-function updateUserList(users) {
-    const fragment = document.createDocumentFragment();
-    const userList = document.getElementById('login-users');
-    userList.innerHTML = '';
-
-    users.forEach(user => {
-        if (user.userName !== localUser) {
-            const li = document.createElement('li');
-            li.innerHTML = user.userName;
-            li.setAttribute('data-name', user.userName);
-            li.style.setProperty('background-color', '#3f51b5');
-            li.style.setProperty('color', '#ffffff');
-            li.style.setProperty('display', 'block');
-            li.addEventListener('click', handleUserClick);
-            li.addEventListener('mouseover', overLi);
-            li.addEventListener('mouseout', outLi);
-            fragment.appendChild(li);
-        }
-    });
-
-    userList.appendChild(fragment);
-}
-*/
 
 /**
  * 用户登录
@@ -301,19 +243,51 @@ export function login(loginName) {
     });
 }
 
+/*用于释放webrtc资源
+* 1、挂断所有正在通信的视频通话（hangup all()）（释放peerconnection实例）
+* 2、释放localstream
+* 3、释放camera资源（VideoSource.dispose() 方法）
+* 4、释放PeerConnectionFactory资源
+* */
+export function releaseRTC() {
+  let localVideo = document.getElementById('local-video');
+  // localVideo.pause();
+  localVideo.srcObject.getTracks().forEach(function (track) {
+    track.stop();
+  });
+  localVideo.srcObject = null;
 
-// // 处理登录
-// function handleLogin(evt) {
-//     let loginName = document.getElementById('login-name').value.trim();
-//     if (loginName === '') {
-//         alert('用户名为空！');
-//         return;
-//     }
-//     login(loginName);
-// }
+  let remoteVideo = document.getElementById('remote-video');
+  // remoteVideo.pause();
+  remoteVideo.srcObject.getTracks().forEach(function (track) {
+    track.stop();
+  });
+  remoteVideo.srcObject = null;
 
-// function init() {
-//     document.getElementById('login-btn').addEventListener('click', handleLogin);
-// }
+  pc = null;
+  stream = null;
+  remoteUser = '';
 
-// init();
+}
+
+export function tellRemoteToClose(){
+  sendUserEvent({
+    type: CLIENT_USER_EVENT_FINISH,
+    payload: {
+      target: remoteUser
+    }
+  })
+  releaseRTC();
+  log("Finish committed.");
+}
+
+socket.on(SERVER_USER_EVENT, function (msg) {
+  if (msg.type === CLIENT_USER_EVENT_FINISH) {
+    log("Finish received.");
+    releaseRTC();
+    alert("The other side leaved room");
+  }
+})
+
+
+

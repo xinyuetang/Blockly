@@ -13,7 +13,7 @@
                 <mat-error *ngIf="roomId.invalid">{{getRoomIdErrorMessage()}}</mat-error>
             </mat-form-field>
             <button (click)="connectRemoteRoom()">开始视频</button>
-            <button>结束视频</button>
+            <button (click)="finish()">结束视频</button>
             <!-- <button>对方操作</button> -->
         </form>
     </mat-card-content>

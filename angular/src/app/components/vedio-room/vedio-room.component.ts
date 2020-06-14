@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormGroupDirective, NgForm, ValidatorFn, AbstractControl } from '@angular/forms';
 // import {io} from './socket.io.js';
-import {login, linkRemoteRoom} from './client.js';
+import {login, linkRemoteRoom, tellRemoteToClose, remoteUser, localUser} from './client.js';
 
 @Component({
   selector: 'app-vedio-room',
@@ -51,22 +51,10 @@ export class VedioRoomComponent implements OnInit {
     }
     return tempStr;
   }
+  finish(){
+    this.roomId.setValue(localUser);
+    tellRemoteToClose();
+  }
 }
 
-
-/*
-function createRoom() {
-  const roomName = randomString();
-  login(roomName);
-  this.roomId = roomName;
-  alert(`Room Created!\nRoom ID:\n ${roomName}`);
-}
-*/
-
-/*
-function connectRemoteRoom() {
-  login(randomString());
-  linkRemoteRoom(this.roomId);
-}
-*/
 

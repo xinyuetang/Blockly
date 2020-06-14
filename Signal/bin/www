@@ -34,6 +34,7 @@ const SERVER_USER_EVENT = 'SERVER_USER_EVENT';
 const CLIENT_USER_EVENT_LOGIN = 'CLIENT_USER_EVENT_LOGIN';
 const SERVER_USER_EVENT_UPDATE_USERS = 'SERVER_USER_EVENT_UPDATE_USERS';
 const OPERATING = 'OPERATING';
+const CLIENT_USER_EVENT_FINISH = 'CLIENT_USER_EVENT_FINISH';
 
 function getOnlineUser() {
   return connectionList
@@ -85,13 +86,25 @@ io.on('connection', function (connection) {
           const {payload} = msg;
           const target = payload.target;
 
-	  console.log(jsonString);
+	  //console.log(jsonString);
           const targetConn = connectionList.find(item => {
 	      return item.userName === target;
           });
           if (targetConn) {
 		  targetConn.connection.emit(SERVER_USER_EVENT, msg);
           }    
+    } else if (type === CLIENT_USER_EVENT_FINISH){
+    	  const msg = JSON.parse(jsonString);
+	  const {payload} = msg;
+	  const target = payload.target;
+
+	  console.log(jsonString);
+	  const targetConn = connectionList.find(item => {
+              return item.userName === target;
+          });
+	  if (targetConn) {
+                  targetConn.connection.emit(SERVER_USER_EVENT, msg);
+          }  
     }
   });
 
