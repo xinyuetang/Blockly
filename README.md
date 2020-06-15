@@ -183,9 +183,9 @@ Blockly.JavaScript['game1_put_to_table'] = function (block) {
 
 ### 设计学习场景
 #### 场景一:收发室初级
-![game0](https://github.com/xinyuetang/Blockly/blob/master/imgs/game0.png){:height="40px" width="350px"}
+<img src="https://github.com/xinyuetang/Blockly/blob/master/imgs/game0.png" width = "350" height = "400" alt="game0" align=center />
 #### 场景二:收发室高级
-![game1](https://github.com/xinyuetang/Blockly/blob/master/imgs/game1.png){:height="450px" width="350px"}
+<img src="https://github.com/xinyuetang/Blockly/blob/master/imgs/game1.png" width = "350" height = "450" alt="game1" align=center />
 
 ### 历史记录
 点击游戏面板中的“保存”按钮则将游戏场景上传到服务器保存
