@@ -6,17 +6,12 @@
     + [动画演示](#动画演示)
     + [导航守卫](#导航守卫)
     + [编程可视化](#编程可视化)
-      - [blockly 注入](#blockly 注入)
-      - [自定义block](#自定义block)
-      - [blockly 代码生成及游戏结果判断](#blockly 代码生成及游戏结果判断)
     + [设计学习场景](#设计学习场景)
-      - [场景一:收发室初级](#场景一:收发室初级)
-      - [场景二:收发室高级](#场景二:收发室高级)
     + [历史记录](#历史记录)
 - [后端](#后端)
   * [运行方式](#运行方式)
   * [数据库](#数据库)
-  * [项目结构(src/main/java)](#项目结构(src/main/java))
+  * [项目结构](#项目结构)
   * [实现功能](#实现功能)
     + [用户相关](#用户相关)
     + [游戏相关](#游戏相关)
@@ -232,7 +227,8 @@ mvn spring-boot:run
 - 通过sql目录下的文件建表
 - 更改src/main/resource/application.properties文件中的登录mysql使用的用户名和密码(同时也可以更换运行端口)
 
-## 项目结构(src/main/java)
+## 项目结构
+src/main/java
 - bean,实体类,(UserEntity)
 - controller,控制类,提供各种resful访问调用,(UserController)
 - service,服务器,实现逻辑业务,(UserService)
