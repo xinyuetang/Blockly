@@ -5,13 +5,44 @@
 }
 .emphasize {
     border:1px solid gainsboro;
-    color: #FF3399;  
-    background-color: #F8F8F8;  
+    color: #FF3399;
+    background-color: #F8F8F8;
     border-radius: 5px;
 }
 .video{
+    margin: auto;
     height: 100px;
-    margin: 10px;
+    /*margin: 10px;*/
     background-color: beige;
+    clear:both;
+    display:block;
 
+}
+#help {
+    margin: 0;
+    position: fixed;
+    left: 78%;
+    top: 11%;
+    width: 21%;
+    height: 100%;
+    overflow: scroll;
+}
+#remote-Video{
+    /*margin: 0;*/
+    position: fixed;
+    left: 78%;
+    top: 53%;
+    width: 21%;
+    height: 22%;
+    background-color:beige;
+}
+
+#local-Video{
+    /*margin: 0;*/
+    position: fixed;
+    left: 78%;
+    top: 77%;
+    width: 21%;
+    height: 23%;
+    background-color:beige;
 }

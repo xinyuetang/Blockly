@@ -4,6 +4,9 @@ import { IGame } from 'src/app/models/game';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AnimationComponent } from '../animation/animation.component';
+import {socket,remoteUser} from '../vedio-room/client.js';
+
+
 // import * as Blockly from 'blockly';
 declare var Blockly: any;
 
@@ -21,9 +24,17 @@ declare var Blockly: any;
   encapsulation: ViewEncapsulation.None,
 })
 
-
 export class BlocklyComponent implements OnInit, OnDestroy {
+  gameId: number;
+  game: IGame;
+  workspace: any;
+  gameList: IGame[];
+  private someHtmlCode = '';
+  navigationSubscription: any;
 
+
+  @ViewChild('animation')
+  animation: AnimationComponent;
 
   constructor(
     private router: Router,
@@ -39,16 +50,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     });
 
   };
-  gameId: number;
-  game: IGame;
-  workspace: any;
-  gameList: IGame[];
-  private someHtmlCode = '';
-  navigationSubscription: any;
 
-
-  @ViewChild('animation')
-  animation: AnimationComponent;
 
   refresh() {
     this.getGame();
@@ -58,7 +60,7 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     }
 
     //若有历史记录
-    if (this.game.xmlData) {
+    if (this.game.xmlData && this.workspace!=null) {
       Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(this.game.xmlData),
         this.workspace
@@ -87,38 +89,53 @@ export class BlocklyComponent implements OnInit, OnDestroy {
       maxBlocks: 20,
       toolbox: this.game.toobox
     });
+
     //若有历史记录
     if (this.game.xmlData) {
       Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(this.game.xmlData),
         this.workspace
       );
-    }
+    };
 
+    this.workspace.addChangeListener(this.onOperate);
+    let workSpace = this.workspace;
+    let onOperate = this.onOperate;
+    socket.on('SERVER_USER_EVENT', function (msg) {
+      
+      if(msg.type== 'OPERATING'){
+        console.log("--- blockly receive change ---");
+        console.log(msg.payload.content);
+        workSpace.clear();
+        Blockly.Xml.domToWorkspace(
+          Blockly.Xml.textToDom(msg.payload.content),  
+          workSpace
+        );
+        workSpace.removeChangeListener(onOperate);
+      }
 
-    /*resizable */
-    // const blocklyArea = document.getElementById('blocklyArea');
-    // const blocklyDiv = document.getElementById('blocklyDiv');
-    // var onresize = function() {
-    //   // Compute the absolute coordinates and dimensions of blocklyArea.
-    //   var element :HTMLElement=blocklyArea;
-    //   var x = 0;
-    //   var y = 0;
-    //   // do {
-    //     x += element.offsetLeft;
-    //     y += element.offsetTop;
-    //     // element =  element.offsetParent;
-    //   // } while (element!=null);
-    //   // Position blocklyDiv over blocklyArea.
-    //   blocklyDiv.style.left = x + 'px';
-    //   blocklyDiv.style.top = y + 'px';
-    //   blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-    //   blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-    //   Blockly.svgResize(this.workspace);
-    // };
-    //  window.addEventListener('resize', onresize, false);
+  });
   }
 
+  onOperate(event) :void{
+    if(event.type==Blockly.Events.BLOCK_MOVE&&remoteUser!=''){
+      
+    let workspace  = Blockly.Workspace.getById(event.workspaceId);
+    let tmp = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+    
+      var msg = {
+        type: 'OPERATING',
+        payload: {
+            content: tmp,
+            target: remoteUser
+        }};
+      socket.emit('CLIENT_USER_EVENT', JSON.stringify(msg));
+      console.log("--- blockly send change ---");
+      console.log(tmp);
+      workspace.removeChangeListener(this);
+    }
+
+  }
 
 
   getGame(): void {
@@ -148,13 +165,17 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     this.animation.clear();
   }
   save(): void {
+    //console.log(this.workspace);
     this.game.xmlData = Blockly.Xml.domToText(
       Blockly.Xml.workspaceToDom(this.workspace)
     );
-    this.gameService.saveHistory(this.gameId, this.game.xmlData).subscribe((data)=>{
-      if(data!=null) console.log('saving the program - ', JSON.stringify(this.game.name));
+    this.gameService.saveHistory(this.gameId, this.game.xmlData).subscribe((data) => {
+      if (data != null){ 
+        console.log('saving the program - ', JSON.stringify(this.game.name));
+        //console.log(this.game.xmlData)
+  }
     });
-    
+
 
   }
   last() {
@@ -170,6 +191,8 @@ export class BlocklyComponent implements OnInit, OnDestroy {
     });
 
   }
+
+
 }
 
 

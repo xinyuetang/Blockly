@@ -28,7 +28,9 @@ public class UserController {
 
     @RequestMapping(value = "/data/user/register",method = RequestMethod.POST)
     public Message register(@RequestParam(value = "userName",required = false) String name,
-                         @RequestParam(value = "password",required = false) String pwd){
+                         @RequestParam(value = "password",required = false) String pwd,
+                         @RequestParam(value = "date",required = false) String date,
+                            @RequestParam(value = "email") String email){
         Message message = new Message();
         if(name == null || pwd == null || "".equals(name) || "".equals(pwd)){
             message.setResult(false);
@@ -43,6 +45,8 @@ public class UserController {
         UserEntity user = new UserEntity();
         user.setName(name);
         user.setPwd(pwd);
+        user.setDate(date);
+        user.setEmail(email);
         if(userService.insertUser(user)!=0){
             message.setResult(true);
             return message;
@@ -102,6 +106,7 @@ public class UserController {
             informationMessage.setUserName(userEntity.getName());
             informationMessage.setAvatar(userEntity.getAvatar());
             informationMessage.setEmail(userEntity.getEmail());
+            informationMessage.setDate(userEntity.getDate());
             return informationMessage;
         }
         Message message = new Message();

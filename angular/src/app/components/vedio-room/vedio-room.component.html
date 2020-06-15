@@ -1,29 +1,27 @@
-<div>
+<div id="help">
     <p class="title">热线求助</p>
     <p>如果您在游玩过程中遇到了困难，您可以通过视频连线向同学或老师寻求帮助，您只需要<span class='emphasize'>点击下方按钮随机生成一个房间号</span>，并让对方<span
             class='emphasize'>输入该房间号</span>，即可开始视频。</p>
     <mat-card-content>
-        <button>开房间</button>
-        <p>房间号：{{roomId}}</p>
-        <br />
-        <button>进房间</button>
+        <button (click)="createRoom()">开房间</button>
+        <span [formControl]="roomId">房间号：{{roomId.value}}</span>
+        <!-- <button>进房间</button> -->
         <form class="form">
-
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>房间号：</mat-label>
                 <input matInput [formControl]="roomId">
                 <mat-error *ngIf="roomId.invalid">{{getRoomIdErrorMessage()}}</mat-error>
             </mat-form-field>
-            <button>开始视频</button>
-            <button>结束视频</button>
-            <button>对方操作</button>
+            <button (click)="connectRemoteRoom()">开始视频</button>
+            <button (click)="finish()">结束视频</button>
+            <!-- <button>对方操作</button> -->
         </form>
     </mat-card-content>
-
-
+    <!-- 对方的视频框-->
+    <video id="remote-video" class="video" autoplay="autoplay"></video>
+    <br />
+    <!-- 我方的视频框 -->
+    <video id="local-video" class="video" autoplay="autoplay"></video>
 </div>
 
-<!-- 对方的视频框 -->
-<div id="him" class="video"></div>
-<!-- 我方的视频框 -->
-<div id="me" class="video"></div>
+

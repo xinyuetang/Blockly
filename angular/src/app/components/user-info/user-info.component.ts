@@ -31,6 +31,7 @@ export class UserInfoComponent implements OnInit {
     this.userService.getInformation().subscribe((data) => {
       console.log(data);
       if (data != null && data.result === true) {
+        console.log(data);
         this.userName = data.userName;
         this.date = data.date;
         this.email = data.email;

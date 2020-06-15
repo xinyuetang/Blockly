@@ -7,7 +7,7 @@
 .wrapper {
   transition: opacity 0.4s ease-out;
   position: absolute;
-  width: 850px;
+  width:50%;
   left: 25%;
 }
 
@@ -15,7 +15,7 @@
   background: rgba(255, 255, 255, 0.9);
   max-width: 600px;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 2.5%;
 }
 
 .title {
