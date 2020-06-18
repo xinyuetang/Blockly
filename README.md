@@ -75,10 +75,61 @@ ng serve --open 或者 npm run start
 ### UI框架
 使用 https://material.angular.io
 ### 动画演示
+根据动作积木的使用考虑动画的执行：
+```
+// angular\src\app\components\animation\animation.component.ts
+  runOne(code: string) {
+    this.clearOne();
+    const employee = document.getElementById('employee');
+    const letterA = document.getElementById('letterA');
+    const letterB = document.getElementById('letterB');
+    const letterC = document.getElementById('letterC');
+    if (code === '10') {
+      gameOne(employee, letterA, 0);
+    } else if (code === '1010') {
+      gameOne(employee, letterA, 0).onComplete(() => {
+        gameOne(employee, letterB, 1);
+      });
+    } else if (code === '101010') {
+      gameOne(employee, letterA, 0).onComplete(() => {
+        gameOne(employee, letterB, 1).onComplete(() => {
+          gameOne(employee, letterC, 2);
+        });
+      });
+    }
+  }
+```
+使用tween.js完成2D动画的操作：
++ angular\src\assets/animation/tween.min.js  tween.js动画压缩版js库
++ angular\src\assets/animation/animation.js  自定义动画js(使用tween.js)
+```
+// angular\src\assets\animation\animation.js
+// 拆分每一次移动，从而组成动画
+function gameOne(employee, letter, letterId) {
+    var letterPosition = { x: 0, y: 0 };
+    var offsetY = letterId * 60;
+    var employeeOne = commonTween({ x: 130, y: 200 }, { x: letterPosition.x, y: offsetY }, employee, 1000);
+    var employeeTwo = commonTween({ x: letterPosition.x, y: offsetY }, { x: letterPosition.x+middleWidth-40, y: offsetY }, employee, 3000);
+    var employeeThree = commonTween({ x: letterPosition.x+middleWidth, y: offsetY },{ x: 130, y: 200 }, employee, 1000);
+    var letterOne = commonTween(letterPosition, { x: letterPosition.x+middleWidth, y: letterPosition.y }, letter, 3000);
+    var letterTwo = commonTween({ x: letterPosition.x+middleWidth, y: letterPosition.y }, { x: letterPosition.x+middleWidth+100, y: letterPosition.y }, letter, 1000);
+    employeeOne.onComplete(function(){
+        employeeTwo.start();
+        letterOne.start();
+    });
+    employeeTwo.onComplete(function(){
+        letterTwo.start();
+    });
+    letterTwo.onComplete(function(){
+        employeeThree.start();
+    })
+    employeeOne.start();
+    return employeeThree;
+}
 
-==TODO: 李舒阳==
- assets/animation/animation.js
- assets/animation/tween.min.js
+
+```
+
 ### 导航守卫
 未登录则跳转到登录页面:
 ```

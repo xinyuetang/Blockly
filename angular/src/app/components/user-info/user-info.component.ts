@@ -12,7 +12,8 @@ export class UserInfoComponent implements OnInit {
 
   // 获取用户信息结果
   userName: string;
-  date: string;//注册日期
+  // 获取用户注册日期
+  date: string;
   email: string;
   // 获取用户操作记录结果
   records: [];
@@ -20,7 +21,7 @@ export class UserInfoComponent implements OnInit {
   displayedColumns: string[] = ['game', 'date', 'time', 'status'];
   dataSource: MatTableDataSource<any>;
 
-  constructor(private userService: UserService,public gameService:GameService) {}
+  constructor(private userService: UserService, public gameService: GameService) {}
 
   ngOnInit(): void {
     this.getInformation();

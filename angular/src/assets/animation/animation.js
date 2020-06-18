@@ -1,14 +1,18 @@
+var middleWidth = 260;
+
 function gameOne(employee, letter, letterId) {
+
+    // alert('middle width to location: ' + middleWidth);
 
     var letterPosition = { x: 0, y: 0 };
     var offsetY = letterId * 60;
 
     var employeeOne = commonTween({ x: 130, y: 200 }, { x: letterPosition.x, y: offsetY }, employee, 1000);
-    var employeeTwo = commonTween({ x: letterPosition.x, y: offsetY }, { x: letterPosition.x+260, y: offsetY }, employee, 3000);
-    var employeeThree = commonTween({ x: letterPosition.x+260, y: offsetY },{ x: 130, y: 200 },employee,1000);
+    var employeeTwo = commonTween({ x: letterPosition.x, y: offsetY }, { x: letterPosition.x+middleWidth-40, y: offsetY }, employee, 3000);
+    var employeeThree = commonTween({ x: letterPosition.x+middleWidth, y: offsetY },{ x: 130, y: 200 }, employee, 1000);
 
-    var letterOne = commonTween(letterPosition, { x: letterPosition.x+260, y: letterPosition.y }, letter, 3000);
-    var letterTwo = commonTween({ x: letterPosition.x+260, y: letterPosition.y }, { x: letterPosition.x+420, y: letterPosition.y }, letter, 1000);
+    var letterOne = commonTween(letterPosition, { x: letterPosition.x+middleWidth, y: letterPosition.y }, letter, 3000);
+    var letterTwo = commonTween({ x: letterPosition.x+middleWidth, y: letterPosition.y }, { x: letterPosition.x+middleWidth+100, y: letterPosition.y }, letter, 1000);
 
     employeeOne.onComplete(function(){
         employeeTwo.start();
@@ -24,8 +28,9 @@ function gameOne(employee, letter, letterId) {
     return employeeThree;
 }
 
-
 function gameTwo(employee, letter0, letter1, letterId){
+
+    // alert('middle width to location: ' + middleWidth);
 
     var offsetY = letterId * 60;
     var offsetsetY = letterId * 30;
@@ -38,17 +43,17 @@ function gameTwo(employee, letter0, letter1, letterId){
     // 3
     var employeeThree = commonTween({ x: 100, y: 0}, { x: 0, y: 30+offsetY }, employee, 1000);
     // 4
-    var employeeFour = commonTween({ x: 0, y: 30+offsetY }, { x: 280, y: 0+offsetY }, employee, 1000); 
-    var letter1One = commonTween({ x: 0, y: 0 }, { x: 280, y: -50 }, letter1, 1000);
-    var letter1Two = commonTween({ x: 280, y: -50 }, { x: 420, y: -50 }, letter1, 1000);
+    var employeeFour = commonTween({ x: 0, y: 30+offsetY }, { x: middleWidth-40, y: 0+offsetY }, employee, 1000); 
+    var letter1One = commonTween({ x: 0, y: 0 }, { x: middleWidth, y: -50 }, letter1, 1000);
+    var letter1Two = commonTween({ x: middleWidth, y: -50 }, { x: middleWidth+100, y: -50 }, letter1, 1000);
     // 5
-    var employeeFive = commonTween({ x: 280, y: 0+offsetY }, { x: 160, y: 0-offsetsetY }, employee, 1000);
+    var employeeFive = commonTween({ x: middleWidth-40, y: 0+offsetY }, { x: 160, y: 0-offsetsetY }, employee, 1000);
     // 6
-    var employeeSix = commonTween({ x: 160, y: 0-offsetsetY }, { x: 280, y: 30+offsetY }, employee, 1000);
-    var letter0Two = commonTween({ x: 220, y: 0-offsetY-offsetsetY }, { x: 280, y: 45 }, letter0, 1000);
-    var letter0Three = commonTween({ x: 280, y: 45 }, { x: 420, y: 45 }, letter0, 1000);
+    var employeeSix = commonTween({ x: 160, y: 0-offsetsetY }, { x: middleWidth-40, y: 30+offsetY }, employee, 1000);
+    var letter0Two = commonTween({ x: 220, y: 0-offsetY-offsetsetY }, { x: middleWidth, y: 45 }, letter0, 1000);
+    var letter0Three = commonTween({ x: middleWidth, y: 45 }, { x: middleWidth+100, y: 45 }, letter0, 1000);
     // 7
-    var employeeSeven = commonTween({ x: 280, y: 30+offsetY }, { x: 130, y: 200 }, employee, 1000);
+    var employeeSeven = commonTween({ x: middleWidth-40, y: 30+offsetY }, { x: 130, y: 200 }, employee, 1000);
 
     employeeOne.onComplete(function(){
         employeeTwo.start();

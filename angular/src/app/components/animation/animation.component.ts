@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import {trigger, state, transition, style, animate} from '@angular/animations';
 declare var gameOne: any;
 declare var gameTwo: any;
+declare var middleWidth: any;
 
 @Component({
   selector: 'app-animation',
@@ -15,7 +16,7 @@ export class AnimationComponent implements OnInit {
   @Input() gameID: number;
 
   ngOnInit(): void {
-    console.log(this.gameID);
+    console.log('gameID: ' + this.gameID);
   }
 
   clear(){
@@ -68,6 +69,12 @@ export class AnimationComponent implements OnInit {
     const letterB = document.getElementById('letterB');
     const letterC = document.getElementById('letterC');
 
+    // 获取middle宽度并传给动画js
+    const middleDiv1 = document.getElementById('middleDiv1');
+    const width1 = middleDiv1.offsetWidth;
+    // alert('width1: ' + width1);
+    middleWidth = width1;
+
     if (code === '10') {
       gameOne(employee, letterA, 0);
     } else if (code === '1010') {
@@ -94,6 +101,12 @@ export class AnimationComponent implements OnInit {
     const letterT = document.getElementById('letterT');
     const letterR = document.getElementById('letterR');
 
+    // 获取middle宽度
+    const middleDiv2 = document.getElementById('middleDiv2');
+    const width2 = middleDiv2.offsetWidth;
+    // alert('width2: ' + width2);
+    middleWidth = width2;
+
     if (code === '141232') {
       gameTwo(employee, letterF0, letterE, 0);
     }else if (code === '141232141232'){
@@ -108,4 +121,6 @@ export class AnimationComponent implements OnInit {
       });
     }
   }
+
+
 }

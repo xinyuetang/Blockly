@@ -21,8 +21,11 @@ export class RegisterComponent implements OnInit {
   userName = new FormControl('', [
     Validators.required,
   ]);
-  //用户邮箱必填
-  email = new FormControl('',[Validators.required,Validators.email]);
+  // 用户邮箱必填
+  email = new FormControl('', [
+    Validators.required,
+    Validators.email
+  ]);
   // 密码必填，且大于等于6位
   password = new FormControl('', [
     Validators.required,
@@ -79,11 +82,11 @@ export class RegisterComponent implements OnInit {
     const name = this.userName.value;
     const password = this.password.value;
     const email  =  this.email.value;
-    this.register(name, password,email);
+    this.register(name, password, email);
   }
 
-  register(name: string, password: string,email:string): void {
-    this.userService.register(name, password,email).subscribe((data) => {
+  register(name: string, password: string, email: string): void {
+    this.userService.register(name, password, email).subscribe((data) => {
       console.log(data);
       if (data != null && data.result === true){
         this.result = data.result;
@@ -109,7 +112,7 @@ export class RegisterComponent implements OnInit {
   }
 // 客户端输入验证-邮箱
   getEmailErrorMessage() {
-    if (this.email.hasError('required')|| this.email.hasError('email')) {
+    if (this.email.hasError('required') || this.email.hasError('email')) {
       return 'Please enter a valid email';
     }
     return '';
