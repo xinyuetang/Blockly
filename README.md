@@ -100,10 +100,9 @@ ng serve --open 或者 npm run start
   }
 ```
 使用tween.js完成2D动画的操作：
-+ angular\src\assets/animation/tween.min.js  tween.js动画压缩版js库
-+ angular\src\assets/animation/animation.js  自定义动画js(使用tween.js)
++ angular\src\assets\animation\tween.min.js     2D动画tween.js库压缩版
++ angular\src\assets\animation\animation.js     自定义动画js(使用tween.js)
 ```
-// angular\src\assets\animation\animation.js
 // 拆分每一次移动，从而组成动画
 function gameOne(employee, letter, letterId) {
     var letterPosition = { x: 0, y: 0 };
@@ -126,8 +125,6 @@ function gameOne(employee, letter, letterId) {
     employeeOne.start();
     return employeeThree;
 }
-
-
 ```
 
 ### 导航守卫
