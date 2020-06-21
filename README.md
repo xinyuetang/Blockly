@@ -564,10 +564,94 @@ src/main/java
 
 # 附加功能-协同学习
 后台管理页面: http://49.235.35.92:8759/
+## 信令服务器 
++ 信令服务器用于传递客户端之间的会话控制信息与网络配置参数
++ 信令服务器与客户端通信参数
+    ```
+        EVENT_TYPE:CLIENT_RTC_EVENT|SERVER_RTC_EVENT|CLIENT_USER_EVENT|SERVER_USER_EVENT
+        msg{
+            type:CLIENT_USER_EVENT_LOGIN|SERVER_USER_EVENT_UPDATE_USERS|OPERATING|CLIENT_USER_EVENT_FINISH
+            payload:{} 
+        }       
+    ```
 
-==TODO: 夏应锋==
+## stun与turn服务器
++ 
+    ```
+    "iceServers": [
+        { url: 'stun:stun.ekiga.net' },
+        { url: 'turn:turnserver.com', username: 'user', credential: 'pass' }
+    ]
+    ```
+## 视频协助
+### 视频房间
+为每位用户生成8位的随机字符串作为userID, 亦为其拥有房间的RoomID，离开房间会失去房间所有权
++ 房间创建 
 
+    ```js
+    /**
+     * 用户登录
+     * @param {String} loginName 用户名
+     */
+    export function login(loginName) {
+        localUser = loginName;
+        sendUserEvent({
+            type: CLIENT_USER_EVENT_LOGIN,
+            payload: {
+                loginName: loginName
+            }
+        });
+    }
+    ```
++ 加入房间
+    ```js
+  export async function linkRemoteRoom(remoteId) {
+        remoteUser = remoteId;
+        await startVideoTalk(remoteUser);
+  }
+    ```
++ 离开房间    
+离开房间时，会将与远程建立连接时的变量如remoteUser，peerConnection都置空，并停止媒体流数据的获取，恢复视频窗口关闭状态
 
+### 实现
++ 音视频信息采集接口MediaDevices.getUserMedia()    
+通过MediaDevices.getUserMedia() 获取用户多媒体权限时，仅工作于以下三种环境：
+  + localhost 域
+  + 开启了 HTTPS 的域
+  + 使用 file:/// 协议打开的本地文件
+其他情况下，比如在一个 HTTP 站点上，navigator.mediaDevices 的值为 undefined。
+而此次的pj基于使用的是http协议，因此需要开启在chrome中开启相应的flag才能正常使用该接口
+
++ 开启Flag    
+通过传递相应参数来启动 Chrome 中 **Insecure origins treated as secure** 并将其添加进入白名单
+  + 打开 chrome://flags/#unsafely-treat-insecure-origin-as-secure
+  + 将该 flag 切换成 enable 状态
+  + 输入框中填写需要开启的域名与接口，譬如 "http://49.235.35.92:8759, http://49.235.35.92:4200"，多个以逗号分隔
+  + 重启浏览器后生效 
+
+## 控制协助
+   通过OPERATING类型的消息，由服务器进行鼠标移动数据的转发，接收端则解析数据进行同步     
+
+    ```js
+      onOperate(event) :void{
+        if(event.type==Blockly.Events.BLOCK_MOVE&&remoteUser!=''){
+          
+        let workspace  = Blockly.Workspace.getById(event.workspaceId);
+        let tmp = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(workspace));
+        
+          var msg = {
+            type: 'OPERATING',
+            payload: {
+                content: tmp,
+                target: remoteUser
+            }};
+          socket.emit('CLIENT_USER_EVENT', JSON.stringify(msg));
+          console.log("--- blockly send change ---");
+          console.log(tmp);
+          workspace.removeChangeListener(this);
+        }
+      }    
+    ```
 ---------
 # 人员分工及贡献比例
 + 唐昕悦(前端, 25%)
@@ -587,12 +671,96 @@ QuikStart界面(quick-start),
 
 + 杨辉 (后端, 25%)
 实现后端所有的接口
+
 + 夏应锋 (后端, 25%)
 使用coturn实现p2p WebRTC(视频聊天功能)
 使用Docker部署项目到公有云上
 --------
-
 # 项目部署
-==TODO: 夏应锋or负责部署的那个人==
+## 信令服务器部署
+信令服务器是基于node.js实现的，而其功能较为单一轻便，因此直接使用screen + npm start完成其在服务器端的部署
+```
+screen -S videoScreen
+npm install
+npm start
+Ctrl + A + D 
+```
+## 后端SpringBoot项目的docker部署
+### 打包项目
++ 建立数据库
+    + 在Linux服务器上安装Mysql
+    + 建立相应的database——blockly与table——user/history/record
+    ```
+    CREATE DATABASE blockly;
+    USE blockly;
+      
+    DROP TABLE IF EXISTS `user`;
+    CREATE TABLE `user`(
+      `id` INT (11) PRIMARY KEY NOT NULL ,
+      `name` VARCHAR(255) NOT NULL UNIQUE,
+      `pwd` VARCHAR(255) NOT NULL,
+      `email` VARCHAR(255),
+      `avatar` VARCHAR(255) DEFAULT '/',
+      `date` VARCHAR(255)
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
+    ALTER TABLE `user` MODIFY `id` INT(11) AUTO_INCREMENT,AUTO_INCREMENT=1;
+
+  
+    DROP TABLE IF EXISTS `history`;
+    CREATE TABLE `history`(
+      `userId` INT(11) NOT NULL ,
+      `gameId` INT(11) NOT NULL ,
+      `history` LONGTEXT,
+      FOREIGN KEY (userId) REFERENCES user(id),
+      PRIMARY KEY (userId,gameId)
+    )
+  
+    
+    DROP TABLE IF EXISTS `record`;
+    CREATE TABLE `record`(
+      `userId` INT(11) NOT NULL ,
+      `gameId` INT(11) NOT NUll ,
+      `date` CHAR(255) NOT NULL ,
+      `time` CHAR(255) NOT NULL ,
+      `status` BOOLEAN NOT NULL DEFAULT FALSE ,
+      FOREIGN KEY (userId) REFERENCES user(id)
+    )
+    ```
+    + 为root账号提供远程访问权限
+
++ 执行maven命令生成jar包
+    ```
+    mvn clean
+    mvn build
+    ```
++ 将jar包部署到Linux服务器
+    + 使用ssh将jar包上传到Linux服务器上
+    + 编写Dockerfile
+    ```
+    FROM java:8
+    #FROM frolvlad/alpine-oraclejdk8:slim
+    VOLUME /tmp
+    ADD Blockly-0.0.1-SNAPSHOT.jar spring-boot-docker.jar
+    EXPOSE 8080
+    RUN sh -c 'touch /spring-boot-docker.jar'
+    ENV JAVA_OPTS=""
+    ENTRYPOINT ["java", "-jar", "/spring-boot-docker.jar"]
+    ```
+    + 创建 docker 镜像并启动容器
+    ```
+    sudo docker build -t blockly2.0 .
+    sudo docker run -d -p 8080:8080 blockly2.0
+    ```
+  
+## 前端Angular项目的部署
++ 使用SSH将angular项目文件发送到云主机
++ 在云主机上编译并部署    
+    由于nodejs服务器默认host为127.0.0.1，仅允许通过本地网关回环访问，未开放远程访问权限，因此需要在启动命令后加上参数host: 0.0.0.0
+    ```
+    cnpm install
+    ng serve --host 0.0.0.0
+    ```
+
 
 
